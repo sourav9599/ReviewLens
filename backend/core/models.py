@@ -78,6 +78,7 @@ class ProcessedReview(BaseModel):
     product_category: str = ""
     product_name: str = ""
     rating: Optional[float] = None
+    sub_ratings: Dict[str, float] = {}
     review_date: Optional[str] = None
     helpful_votes: int = 0
     verified_purchase: bool = False

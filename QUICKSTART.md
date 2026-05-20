@@ -1,4 +1,4 @@
-# ReviewIQ — Quick Start Guide
+# ReviewLens — Quick Start Guide
 
 > **Customer Review Intelligence Platform**  
 > 6-Agent LangGraph pipeline · Ollama llama3.1:8b · React + FastAPI · Glassmorphism SaaS UI
@@ -9,7 +9,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                   ReviewIQ LangGraph Pipeline                │
+│                   ReviewLens LangGraph Pipeline                │
 │                                                             │
 │  [1] PreprocessingAgent                                     │
 │       └─ Clean text, emoji→text, detect language            │

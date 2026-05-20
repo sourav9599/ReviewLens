@@ -1,0 +1,46 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	preprocessing(preprocessing)
+	emoji_agent(emoji_agent)
+	orchestrator_pre(orchestrator_pre)
+	deduplication(deduplication)
+	orchestrator_post_dedup(orchestrator_post_dedup)
+	sentiment_analysis(sentiment_analysis)
+	orchestrator_post_sentiment(orchestrator_post_sentiment)
+	trend_detection(trend_detection)
+	orchestrator_post_trend(orchestrator_post_trend)
+	recommendations_node(recommendations_node)
+	orchestrator_cross_check(orchestrator_cross_check)
+	cross_compare_node(cross_compare_node)
+	report_synthesis(report_synthesis)
+	mentions_extraction(mentions_extraction)
+	embedding_generation(embedding_generation)
+	hotel_json_export(hotel_json_export)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> preprocessing;
+	cross_compare_node --> report_synthesis;
+	deduplication --> orchestrator_post_dedup;
+	embedding_generation --> hotel_json_export;
+	emoji_agent --> orchestrator_pre;
+	mentions_extraction --> embedding_generation;
+	orchestrator_cross_check -. &nbsp;run&nbsp; .-> cross_compare_node;
+	orchestrator_cross_check -. &nbsp;skip&nbsp; .-> report_synthesis;
+	orchestrator_post_dedup -. &nbsp;requeue_dedup&nbsp; .-> deduplication;
+	orchestrator_post_dedup -. &nbsp;proceed&nbsp; .-> sentiment_analysis;
+	orchestrator_post_sentiment --> trend_detection;
+	orchestrator_post_trend --> recommendations_node;
+	orchestrator_pre --> deduplication;
+	preprocessing --> emoji_agent;
+	recommendations_node --> orchestrator_cross_check;
+	report_synthesis --> mentions_extraction;
+	sentiment_analysis --> orchestrator_post_sentiment;
+	trend_detection --> orchestrator_post_trend;
+	hotel_json_export --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

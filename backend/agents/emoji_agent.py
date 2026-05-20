@@ -1,11 +1,30 @@
 """
-Agent: Emoji Analysis Agent
-============================
-- Extracts emoji signals from raw review text (before cleaning)
-- Maps emojis to sentiment signals with confidence boosts
-- Enriches ProcessedReview with emoji_signals and emoji_count
-- Updates review confidence based on emoji-sentiment alignment
-- Emits emoji_found events to AgentBus
+Agent 2: Emoji Analysis Agent
+===============================
+Extracts emoji signals from raw Marriott hotel review text (before cleaning),
+maps emojis to sentiment signals with confidence boosts, and enriches reviews.
+Particularly relevant for reviews from younger demographics, social media
+cross-posts, and international travelers where emoji usage conveys strong
+sentiment that text analysis alone might miss.
+
+ReviewLens Context:
+───────────────────
+Marriott serves a global guest base where emoji communication patterns vary.
+A business traveler from Japan may use 🙇‍♂️ to indicate respect, while a
+leisure traveler uses 😍 to express delight. Emoji signals boost sentiment
+confidence, making the Property Manager Topic Heatmap more accurate.
+
+Enterprise KPI Alignment:
+─────────────────────────
+• Intent to Recommend: Emoji-enriched sentiment scoring produces more accurate
+  guest satisfaction signals (e.g. 😍 vs 😡), helping identify truly delighted
+  guests who are likely to recommend.
+• Marriott Bonvoy Occupancy & Enrollments: Younger Bonvoy members use emojis
+  heavily; analyzing these signals ensures their feedback isn't lost.
+• RevPAR: More accurate sentiment confidence means better prioritization of
+  issues that actually impact bookings.
+
+Pipeline Position: Runs AFTER preprocessing → feeds Orchestrator Pre-Analysis.
 """
 import logging
 from typing import List, Dict, Tuple

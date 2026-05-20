@@ -1,11 +1,30 @@
 """
-Cross-Product Comparison Agent
-================================
-- Groups reviews by product_category
-- Computes per-category sentiment distributions
-- Feature-level complaint/praise rates per category
-- Identifies best/worst performing categories
-- Outputs CrossProductComparison to pipeline state
+Cross-Property Comparison Agent
+=================================
+Compares review sentiment and feature performance across different Marriott
+hotel properties or room categories (Luxury, Business, Budget). Identifies
+best/worst performing property types and surfaces competitive intelligence
+for portfolio management and franchise development.
+
+ReviewLens Context:
+───────────────────
+When ReviewLens ingests reviews across multiple property types (e.g. JW
+Marriott vs. Courtyard vs. Residence Inn), this agent benchmarks topic
+performance across them. A brand team can see: "Courtyard properties have
+38% cleanliness complaints vs. 12% at JW Marriott — investigate standards."
+
+Enterprise KPI Alignment:
+─────────────────────────
+• Net Rooms Growth: Cross-property comparison identifies underperforming
+  properties, informing portfolio optimization and franchise development.
+• RevPAR: Benchmarking against peers reveals whether a property is
+  underperforming its market potential and why.
+• Non-RevPAR Affiliation Fees: Comparative analytics across the portfolio
+  strengthens the value proposition for franchise affiliates.
+• Leadership Index: Enables regional leadership to identify properties
+  needing support vs. those exemplifying best practices for replication.
+
+Pipeline Position: Conditional — runs only when multiple property types exist.
 """
 import logging
 from typing import Dict, List
@@ -31,14 +50,14 @@ def cross_comparison_agent(state: ReviewPipelineState) -> ReviewPipelineState:
         if r.status not in {ReviewStatus.DUPLICATE, ReviewStatus.BOT_SUSPECTED}
     ]
 
-    # Group by category
+    # Group by property type / category
     by_category: Dict[str, List[ProcessedReview]] = defaultdict(list)
     for r in analyzable:
-        cat = r.product_category if r.product_category and r.product_category != "Unknown" else "General"
+        cat = r.product_category if r.product_category and r.product_category != "Unknown" else "Hotel"
         by_category[cat].append(r)
 
     if len(by_category) < 2:
-        logger.info("[CrossComparisonAgent] Not enough categories for comparison")
+        logger.info("[CrossComparisonAgent] Not enough property types for comparison")
         state["cross_product_comparison"] = CrossProductComparison(
             categories=list(by_category.keys()),
             sentiment_by_category={},
@@ -48,7 +67,7 @@ def cross_comparison_agent(state: ReviewPipelineState) -> ReviewPipelineState:
         state["progress"] = {**state.get("progress", {}), "cross_comparison": "skipped"}
         return state
 
-    logger.info(f"[CrossComparisonAgent] Comparing {len(by_category)} categories: {list(by_category.keys())}")
+    logger.info(f"[CrossComparisonAgent] Comparing {len(by_category)} property types: {list(by_category.keys())}")
 
     sentiment_by_cat: Dict[str, Dict[str, float]] = {}
     feature_by_cat: Dict[str, Dict[str, float]] = {}
@@ -68,7 +87,7 @@ def cross_comparison_agent(state: ReviewPipelineState) -> ReviewPipelineState:
         }
 
         # Bot rate
-        all_cat_reviews_incl_bots = [r for r in reviews if (r.product_category or "General") == cat or (r.product_category == "Unknown" and cat == "General")]
+        all_cat_reviews_incl_bots = [r for r in reviews if (r.product_category or "Hotel") == cat or (r.product_category == "Unknown" and cat == "Hotel")]
         bot_count = sum(1 for r in all_cat_reviews_incl_bots if r.status == ReviewStatus.BOT_SUSPECTED)
         bot_rate_by_cat[cat] = round(bot_count / max(len(all_cat_reviews_incl_bots), 1), 3)
 

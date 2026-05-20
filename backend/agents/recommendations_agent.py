@@ -1,14 +1,40 @@
 """
-Agent 5: Actionable Recommendations Agent
-- Synthesizes all analysis into prioritized, business-ready recommendations
-- Uses LLM to generate contextual, specific actions
-- Categorizes by product/marketing/operations/quality
+Agent 6: Actionable Recommendations Agent
+===========================================
+Synthesizes all upstream analysis (sentiment, trends, anomalies) into
+prioritized, business-ready recommendations for Marriott property General
+Managers and operations teams. Uses Gemini LLM to generate contextual,
+hotel-specific actions categorized by operations, service, marketing, and
+quality improvement.
+
+ReviewLens Context:
+───────────────────
+ReviewLens replaces the 45-minute daily manual review scan with automated
+topic intelligence. This agent is the "action layer" — converting statistical
+signals (topic heatmaps, trend alerts, sentiment shifts) into concrete steps:
+"Increase housekeeping staff on floors 4-8 during weekend peak" or
+"Noise: install sound-dampening panels near elevator bank — 23 complaints."
+
+Enterprise KPI Alignment:
+─────────────────────────
+• RevPAR: Prioritized operational recommendations directly target issues
+  suppressing occupancy and ADR (e.g. "Address cleanliness at 35% negative").
+• EBITDA Growth: Replaces expensive consulting; automated insight delivery
+  at scale reduces cost-per-insight across 9,000+ properties.
+• Intent to Recommend: Recommendations that fix guest pain points directly
+  improve NPS (+4-8 points within 90 days per Cornell Hospitality study).
+• Leadership Index: Structured action plan prioritized by impact enables
+  focused, measurable leadership execution.
+• Non-RevPAR Affiliation Fees: AI-driven operational intelligence adds
+  value to the franchise relationship.
+
+Pipeline Position: Runs AFTER trend detection → feeds Cross-Comparison/Report.
 """
 import json
 import re
 from typing import List, Dict, Any
 from collections import defaultdict, Counter
-from langchain_ollama import OllamaLLM
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from core.models import (
     ReviewPipelineState, ProcessedReview, TrendAlert,
@@ -22,36 +48,47 @@ logger = logging.getLogger(__name__)
 
 RECOMMENDATION_PROMPT = PromptTemplate(
     input_variables=["analysis_summary", "top_issues", "top_praises", "alerts"],
-    template="""You are a senior product strategy consultant. Based on the following customer review analysis, generate 5-8 prioritized, actionable recommendations for the product and marketing teams.
+    template="""You are a hospitality operations strategist with 15 years of experience advising luxury and full-service hotel properties on service recovery, operational efficiency, and revenue optimization.
 
-ANALYSIS SUMMARY:
+CONTEXT: You are reviewing guest feedback analytics for a Marriott property. Your recommendations will be presented to the General Manager and Department Heads in their weekly operations meeting.
+
+ANALYSIS DATA:
 {analysis_summary}
 
-TOP ISSUES (Features with most complaints):
+GUEST PAIN POINTS (ranked by frequency):
 {top_issues}
 
-TOP PRAISES (Features with most positive feedback):
+GUEST DELIGHT DRIVERS (ranked by frequency):
 {top_praises}
 
-TREND ALERTS:
+ACTIVE ALERTS:
 {alerts}
 
-Generate recommendations as a JSON array. Return ONLY valid JSON, no markdown.
+TASK: Generate 5-8 prioritized recommendations that follow the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound).
 
-Each recommendation must follow this structure:
+RECOMMENDATION PRINCIPLES:
+- Each recommendation must tie to a measurable business outcome (NPS, RevPAR, CSAT, or cost reduction)
+- Distinguish between quick wins (< 48 hours, no budget) vs. strategic investments (require capex/staffing changes)
+- For negative trends: prescribe BOTH immediate containment AND root cause resolution
+- For positive trends: prescribe amplification strategies (marketing, upsell, staff recognition)
+- Never recommend "monitor the situation" — every recommendation must have a concrete action verb
+- Consider the guest lifecycle: pre-arrival, check-in, in-stay, check-out, post-stay
+
+OUTPUT: Return ONLY a valid JSON array. No markdown, no backticks, no explanation.
+
+Each object in the array:
 {{
   "priority": 1,
-  "category": "product|marketing|operations|quality",
-  "title": "Short action title",
-  "description": "What the data shows",
-  "supporting_data": "Specific numbers/percentages from the analysis",
-  "suggested_action": "Concrete step to take",
-  "estimated_impact": "Expected business outcome",
-  "affected_feature": "battery life"
+  "category": "operations|service|marketing|quality",
+  "title": "Action-verb title (e.g. 'Deploy additional housekeeping staff on weekends')",
+  "description": "What the guest feedback reveals — written as an insight, not a data dump",
+  "supporting_data": "The specific metric or pattern that triggered this recommendation",
+  "suggested_action": "Concrete next step with owner, timeline, and success metric",
+  "estimated_impact": "Projected business outcome (e.g. '+3 NPS points within 30 days', 'Reduce complaint rate from 35% to 15%')",
+  "affected_feature": "cleanliness"
 }}
 
-Priority 1=critical, 2=high, 3=medium, 4=low.
-Be specific, data-driven, and actionable. Do not be generic."""
+Priority scale: 1 = Critical (revenue/reputation at immediate risk), 2 = High (address this week), 3 = Medium (this month), 4 = Low (next quarter planning)."""
 )
 
 
@@ -175,33 +212,31 @@ def fallback_recommendations(
             if fs.sentiment == SentimentLabel.NEGATIVE:
                 feature_complaints[fs.feature] += 1
     
-    # Top complaint features
     for feature, count in sorted(feature_complaints.items(), key=lambda x: x[1], reverse=True)[:3]:
         total = feature_total[feature]
         rate = count / max(total, 1)
         if rate >= 0.25:
             recs.append(ActionableRecommendation(
                 priority=1 if rate >= 0.4 else 2,
-                category="product",
-                title=f"Address {feature.title()} Issues",
-                description=f"{rate:.0%} of reviews mention negative {feature}",
+                category="operations",
+                title=f"Address {feature.replace('_', ' ').title()} Complaints",
+                description=f"{rate:.0%} of guest reviews mention negative {feature.replace('_', ' ')} experience",
                 supporting_data=f"{count} complaints out of {total} mentions",
-                suggested_action=f"Conduct root cause analysis on {feature} and prioritize fix in next sprint",
-                estimated_impact="Estimated improvement in overall rating",
+                suggested_action=f"Investigate root cause of {feature.replace('_', ' ')} issues; consider staffing/maintenance review",
+                estimated_impact="Expected improvement in guest satisfaction scores and NPS",
                 affected_feature=feature
             ))
     
-    # Alert-based recommendations
     for alert in alerts[:3]:
         if alert.severity in {"critical", "warning"}:
             recs.append(ActionableRecommendation(
                 priority=1 if alert.severity == "critical" else 2,
                 category="quality",
-                title=f"Investigate {alert.feature.title()} Trend",
+                title=f"Investigate {alert.feature.replace('_', ' ').title()} Trend",
                 description=alert.description,
                 supporting_data=f"Rate: {alert.current_rate:.0%}, Change: +{alert.change_percent:.0f}%",
-                suggested_action="Immediate quality control review recommended",
-                estimated_impact="Prevent customer churn and negative word-of-mouth",
+                suggested_action="Immediate operational review and guest recovery protocol",
+                estimated_impact="Prevent NPS decline and negative review accumulation",
                 affected_feature=alert.feature
             ))
     
@@ -221,11 +256,11 @@ def recommendations_agent(state: ReviewPipelineState) -> ReviewPipelineState:
     summary, top_issues, top_praises, alerts_str = build_analysis_summary(reviews, alerts)
     
     try:
-        llm = OllamaLLM(
-            base_url=settings.OLLAMA_BASE_URL,
-            model=settings.OLLAMA_MODEL,
+        llm = ChatGoogleGenerativeAI(
+            model=settings.GEMINI_MODEL,
+            google_api_key=settings.GOOGLE_API_KEY,
             temperature=0.0,
-            num_predict=400,
+            max_output_tokens=1024,
         )
         
         prompt = RECOMMENDATION_PROMPT.format(
@@ -236,7 +271,7 @@ def recommendations_agent(state: ReviewPipelineState) -> ReviewPipelineState:
         )
         
         response = llm.invoke(prompt)
-        recommendations = parse_recommendations(response)
+        recommendations = parse_recommendations(response.content)
         
         if not recommendations:
             raise ValueError("No recommendations parsed from LLM")

@@ -1,6 +1,20 @@
 """
-Orchestrator / Controller Agent — The Brain of ReviewIQ
-========================================================
+Orchestrator / Controller Agent — Pipeline Intelligence Hub
+=============================================================
+Dynamic decision-making agent that acts as the operational brain of the
+ReviewLens hotel review pipeline. Assesses data quality at key pipeline
+junctions and routes processing dynamically based on real-time signals
+from upstream agents.
+
+ReviewLens Context:
+───────────────────
+At Marriott's scale (~10M reviews/month across 9,000 properties), not every
+review batch needs the same processing depth. This agent optimizes compute
+costs by dynamically routing: small batches skip trend detection, high bot-rate
+batches trigger feedback loops, and low-confidence datasets get flagged before
+expensive recommendation generation. This keeps inference costs within the
+~$0.003/1K tokens budget at scale.
+
 Dynamic Decision Making:
   - Assesses data quality after each pipeline phase
   - Routes pipeline dynamically (feedback loops, skips, escalations)
@@ -11,10 +25,17 @@ Inter-Agent Communication:
   - Subscribes to bot_detected, low_confidence, alert_raised events
   - Emits quality_check events for downstream agents
 
-Feedback Loops:
-  - Triggers re-dedup if bot rate is too high
-  - Triggers sentiment re-analysis if avg confidence is too low
-  - Limits retries via feedback_loop_count
+Enterprise KPI Alignment:
+─────────────────────────
+• EBITDA Growth: Intelligent routing optimizes compute costs and reduces
+  API spend on LLM calls (skip unnecessary processing at scale).
+• RevPAR: Quality gates ensure only high-confidence insights reach the
+  Property Manager Dashboard, preventing false signals.
+• Leadership Index: Full decision auditability (OrchestratorDecision log)
+  provides transparency into AI reasoning, building leadership trust in
+  automated operational intelligence.
+
+Pipeline Position: Operates at 4 checkpoints across the pipeline flow.
 """
 import uuid
 import logging

@@ -1,9 +1,33 @@
 """
-Agent 4: Trend Detection & Anomaly Detection Agent
-- Sliding window analysis over review batches
-- Detects emerging complaint/praise patterns
-- Z-score based anomaly detection for sentiment drops
-- Differentiates isolated vs. systemic issues
+Agent 5: Trend Detection & Anomaly Detection Agent
+====================================================
+Performs sliding-window time-series analysis over Marriott hotel review batches
+to detect emerging complaint patterns, praise trends, and statistical anomalies
+(z-score based). Distinguishes isolated incidents from systemic operational
+issues that require management intervention.
+
+ReviewLens Context:
+───────────────────
+This agent powers the "Trend Alerts" on the Property Manager Dashboard. When
+the JW Marriott Seattle GM logs in Monday morning and sees "Housekeeping
+complaints jumped from 12% → 38% in last 50 reviews" — that signal comes
+from this agent. It transforms raw review volume into actionable time-series
+intelligence, enabling the 2-minute daily briefing vs. the 45-minute manual scan.
+
+Enterprise KPI Alignment:
+─────────────────────────
+• RevPAR: Early detection of emerging complaint trends enables proactive fixes
+  before negative reviews accumulate and impact occupancy/ADR.
+• EBITDA Growth: Identifying systemic issues early prevents expensive service
+  recovery costs and compensation payouts.
+• Intent to Recommend: Surfacing emerging praise patterns identifies marketing
+  opportunities that can amplify word-of-mouth recommendations (+4-8 NPS pts).
+• Leadership Index: Trend alerts give GMs early warning signals, enabling
+  proactive leadership rather than reactive crisis management.
+• Net Rooms Growth: Properties with consistently positive trends attract
+  franchise interest; negative trend detection helps maintain brand standards.
+
+Pipeline Position: Runs AFTER sentiment analysis → feeds Recommendations.
 """
 import uuid
 import statistics

@@ -1,10 +1,30 @@
 """
-Agent 2: Enhanced Deduplication & Bot Detection Agent
-- Exact duplicate removal
-- Near-duplicate clustering (TF-IDF + cosine similarity)
-- Advanced bot detection with risk levels (low/medium/high/critical)
-- Emits bot events to AgentBus for Orchestrator
-- Accepts retry_mode (feedback loop) with stricter thresholds
+Agent 3: Deduplication & Bot Detection Agent
+==============================================
+Protects the integrity of Marriott hotel review analytics by removing exact
+duplicates, near-duplicate reviews (fuzzy matching), and detecting bot/spam
+reviews using multi-signal heuristic scoring with risk level classification.
+
+ReviewLens Context:
+───────────────────
+ReviewLens surfaces dynamic topic clusters on Marriott.com where guests filter
+reviews by "Pool," "Gym," "Valet," etc. Fake or duplicate reviews poison topic
+frequency counts and sentiment scores. This agent ensures the Popular Mentions
+feature and Property Manager Topic Heatmap reflect genuine guest experiences.
+
+Enterprise KPI Alignment:
+─────────────────────────
+• Intent to Recommend: Removing fake reviews ensures the guest-facing review
+  page reflects genuine experiences, maintaining trust and credibility.
+• RevPAR: Fake positive reviews mask operational issues; removing them
+  surfaces true problems that, when fixed, improve actual satisfaction.
+• EBITDA Growth: Automated bot detection eliminates manual moderation.
+• Digital Direct Share: Trustworthy reviews on Marriott.com differentiate
+  it from third-party sites with known spam issues.
+• Non-RevPAR Affiliation Fees: Clean review data strengthens the Marriott
+  brand proposition for franchise owners considering affiliation.
+
+Pipeline Position: Runs AFTER orchestrator_pre → feeds orchestrator_post_dedup.
 """
 import re
 import hashlib
@@ -46,8 +66,8 @@ def compute_bot_score(review: ProcessedReview, all_reviews: List[ProcessedReview
     words = text.split()
     word_count = len(words)
 
-    # Signal 0: Spam keywords
-    spam_keywords = ["buy now", "limited offer", "best product ever", "hurry", "sale", "click here", "discount"]
+    # Signal 0: Spam keywords (hotel-specific)
+    spam_keywords = ["buy now", "limited offer", "best hotel ever", "hurry", "click here", "discount code", "free stay", "promo"]
     if any(k in text for k in spam_keywords):
         score += 0.4
         signals.append("spam_keywords")
@@ -68,11 +88,12 @@ def compute_bot_score(review: ProcessedReview, all_reviews: List[ProcessedReview
             score += 0.25
             signals.append("word_repetition")
 
-    # Signal 3: Generic template phrases
+    # Signal 3: Generic template phrases (hotel context)
     generic_phrases = [
-        "good product", "nice product", "best product", "worst product",
+        "good hotel", "nice hotel", "best hotel", "worst hotel",
         "highly recommend", "do not recommend", "great value", "waste of money",
-        "five stars", "one star", "love it", "hate it"
+        "five stars", "one star", "amazing stay", "terrible stay",
+        "perfect location", "worst experience"
     ]
     generic_matches = sum(1 for phrase in generic_phrases if phrase in text)
     if generic_matches >= 2 and word_count < 15:
@@ -104,8 +125,12 @@ def compute_bot_score(review: ProcessedReview, all_reviews: List[ProcessedReview
             score += 0.3
             signals.append("near_duplicate_flood")
 
-    # Signal 7: No feature mention (overly vague)
-    feature_words = ["battery", "quality", "packaging", "price", "delivery", "sound", "screen", "size", "color", "material"]
+    # Signal 7: No hotel feature mention (overly vague)
+    feature_words = [
+        "room", "bed", "clean", "staff", "breakfast", "pool", "wifi",
+        "location", "parking", "check-in", "noise", "view", "bathroom",
+        "service", "restaurant", "lobby", "spa", "gym", "elevator"
+    ]
     if word_count >= 10 and not any(fw in text for fw in feature_words):
         if generic_matches >= 1:
             score += 0.1

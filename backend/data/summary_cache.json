@@ -1,0 +1,40 @@
+{
+  "NYCES": {
+    "hotel_id": "NYCES",
+    "hotel_name": "Courtyard New York Manhattan/Fifth Avenue",
+    "generated_at": "2026-05-21T12:26:09.156306",
+    "total_reviews_summarized": 200,
+    "digest_count": 2,
+    "narrative_summary": "This Courtyard hotel shines with its enviable Midtown Manhattan location, placing guests within easy reach of iconic landmarks like Bryant Park and Grand Central Terminal. Visitors consistently commend the attentive and welcoming service team, noting their helpfulness and the overall comfort of their stays. The hotel's proximity to major attractions and its generally safe neighborhood are frequently cited as significant advantages for travelers exploring the city.",
+    "categories": {
+      "Location": "Prime Midtown",
+      "Rooms": "Compact",
+      "Cleanliness": "Tidy",
+      "Service": "Warm & Attentive",
+      "Dining": "Basic",
+      "Value": "Location-Driven"
+    },
+    "highlights": [
+      "Unbeatable proximity to Bryant Park and Grand Central",
+      "Consistently praised for friendly and helpful staff",
+      "Safe and convenient neighborhood for exploring"
+    ],
+    "lowlights": [
+      "Occasional issues with elevator functionality",
+      "Rooms can be on the smaller side",
+      "Some guests noted dated decor and amenities"
+    ],
+    "avg_rating": null,
+    "sub_ratings_avg": {
+      "cleanliness": 3.77,
+      "location": 4.52,
+      "amenities": 3.01,
+      "dining": 2.83,
+      "service": 3.63,
+      "value": 3.04
+    },
+    "verdict": "Book for its exceptional location and service, but manage expectations regarding room size and potential elevator delays.",
+    "is_stale": false,
+    "last_digest_id": "batch_9fed38e6"
+  }
+}

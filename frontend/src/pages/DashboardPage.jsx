@@ -37,9 +37,9 @@ import ExecutiveBriefTab from "../components/dashboard/ExecutiveBriefTab";
 const TABS = [
   { id: "overview", label: "Overview", icon: BarChart3 },
   { id: "sentiment", label: "Sentiment", icon: Users },
-  { id: "trends", label: "Trends", icon: TrendingUp },
+  // { id: "trends", label: "Trends", icon: TrendingUp },
   { id: "recommendations", label: "Insights", icon: Zap },
-  { id: "agent_ai", label: "Agent AI", icon: Brain },
+  // { id: "agent_ai", label: "Agent AI", icon: Brain },
   { id: "emoji", label: "Emoji", icon: Smile },
   { id: "cross_compare", label: "Compare", icon: Layers },
   { id: "reviews", label: "All Reviews", icon: Shield },
@@ -248,7 +248,7 @@ export default function DashboardPage() {
               className="font-bold text-2xl"
               style={{ color: "#1E293B", fontFamily: "DM Sans, sans-serif" }}
             >
-              Intelligence Dashboard
+              Review Intelligence Dashboard
             </motion.h1>
             {/* Meta row */}
             <div className="flex items-center gap-3 mt-1 flex-wrap">
@@ -269,7 +269,7 @@ export default function DashboardPage() {
                 ⚡ {report.processing_time_seconds}s
               </span>
               <span style={{ color: "#CBD5E1" }}>·</span>
-              <span
+              {/* <span
                 className="text-xs px-2 py-0.5 rounded-full font-semibold"
                 style={{
                   background: "#EDE9FE",
@@ -278,7 +278,7 @@ export default function DashboardPage() {
                 }}
               >
                 v{report.pipeline_version || "2.0"}
-              </span>
+              </span> */}
               {report.feedback_loops_triggered > 0 && (
                 <>
                   <span style={{ color: "#CBD5E1" }}>·</span>
@@ -362,7 +362,7 @@ export default function DashboardPage() {
             ))}
 
             {/* Live Feed toggle */}
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={() => setLiveFeedOpen((v) => !v)}
@@ -386,7 +386,7 @@ export default function DashboardPage() {
                   className="w-1.5 h-1.5 rounded-full bg-green-400"
                 />
               )}
-            </motion.button>
+            </motion.button> */}
 
             {/* PDF Download */}
             <motion.button

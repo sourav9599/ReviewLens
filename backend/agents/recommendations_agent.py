@@ -32,15 +32,16 @@ Pipeline Position: Runs AFTER trend detection → feeds Cross-Comparison/Report.
 """
 import json
 import re
+import time
 from typing import List, Dict, Any
 from collections import defaultdict, Counter
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from core.models import (
     ReviewPipelineState, ProcessedReview, TrendAlert,
     ActionableRecommendation, SentimentLabel, ReviewStatus
 )
 from core.config import settings
+from core.llm_factory import get_llm
 import logging
 
 logger = logging.getLogger(__name__)
@@ -256,12 +257,7 @@ def recommendations_agent(state: ReviewPipelineState) -> ReviewPipelineState:
     summary, top_issues, top_praises, alerts_str = build_analysis_summary(reviews, alerts)
     
     try:
-        llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GOOGLE_API_KEY,
-            temperature=0.0,
-            max_output_tokens=1024,
-        )
+        llm = get_llm(temperature=0.0, max_tokens=1024)
         
         prompt = RECOMMENDATION_PROMPT.format(
             analysis_summary=summary,
@@ -272,6 +268,8 @@ def recommendations_agent(state: ReviewPipelineState) -> ReviewPipelineState:
         
         response = llm.invoke(prompt)
         recommendations = parse_recommendations(response.content)
+
+        time.sleep(1)
         
         if not recommendations:
             raise ValueError("No recommendations parsed from LLM")

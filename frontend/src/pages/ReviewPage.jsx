@@ -60,10 +60,47 @@ function RatingBar({ label, value, maxWidth = 80, color = "#8B6914" }) {
   );
 }
 
+function ReviewRatingBar({ label, value }) {
+  const percentage = (value / 5) * 100;
+  return (
+    <div className="mb-1.5">
+      <div className="text-[10px] text-[#333] font-medium mb-0.5">{label}</div>
+      <div className="w-[100px] h-[10px] bg-[#e0e0e0] relative rounded-sm overflow-hidden">
+        <div
+          className="h-full absolute left-0 top-0"
+          style={{
+            width: `${percentage}%`,
+            background: "linear-gradient(180deg, #C9A84C 0%, #8B6914 50%, #A67C00 100%)",
+          }}
+        />
+        {[1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className="absolute top-0 h-full w-[1px] bg-white/50"
+            style={{ left: `${(i / 5) * 100}%` }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ReviewPage() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedMention, setSelectedMention] = useState(null);
+  const [mentionReviews, setMentionReviews] = useState([]);
+  const [mentionLoading, setMentionLoading] = useState(false);
+  const [popularMentions, setPopularMentions] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [reviewsTotal, setReviewsTotal] = useState(0);
+  const [reviewsPage, setReviewsPage] = useState(0);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   useEffect(() => {
     axios
@@ -76,7 +113,87 @@ export default function ReviewPage() {
         setError(err.message);
         setLoading(false);
       });
+
+    axios
+      .get("/api/hotel-reviews/mentions/popular?hotel_id=NYCES&limit=15")
+      .then((res) => {
+        setPopularMentions(res.data.mentions || []);
+      })
+      .catch(() => {});
+
+    fetchReviews(0);
   }, []);
+
+  const fetchReviews = (page) => {
+    setReviewsLoading(true);
+    axios
+      .get(`/api/hotel-reviews/data?hotel_id=NYCES&page=${page}&page_size=20`)
+      .then((res) => {
+        setReviews(res.data.reviews || []);
+        setReviewsTotal(res.data.total || 0);
+        setReviewsPage(page);
+        setReviewsLoading(false);
+      })
+      .catch(() => {
+        setReviewsLoading(false);
+      });
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) {
+      setIsSearchActive(false);
+      setSearchResults([]);
+      return;
+    }
+    setSearchLoading(true);
+    setIsSearchActive(true);
+    axios
+      .get(`/api/hotel-reviews/semantic-search?q=${encodeURIComponent(searchQuery.trim())}&hotel_id=NYCES&top_k=20`)
+      .then((res) => {
+        setSearchResults(res.data.results || []);
+        setSearchLoading(false);
+      })
+      .catch(() => {
+        setSearchResults([]);
+        setSearchLoading(false);
+      });
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setIsSearchActive(false);
+    setSearchResults([]);
+  };
+
+  const handleMentionClick = (tag) => {
+    if (selectedMention === tag) {
+      setSelectedMention(null);
+      setMentionReviews([]);
+      return;
+    }
+    setSelectedMention(tag);
+    setMentionLoading(true);
+    axios
+      .get(
+        `/api/hotel-reviews/search?hotel_id=NYCES&tag=${encodeURIComponent(tag)}&page_size=50`,
+      )
+      .then((res) => {
+        setMentionReviews(res.data.reviews || []);
+        setMentionLoading(false);
+      })
+      .catch(() => {
+        setMentionReviews([]);
+        setMentionLoading(false);
+      });
+  };
+
+  const getAvgSubRating = (sub) => {
+    if (!sub || typeof sub !== "object") return 0;
+    const values = Object.values(sub).filter((v) => typeof v === "number");
+    if (values.length === 0) return 0;
+    return Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10) / 10;
+  };
 
   const subRatings = summary?.sub_ratings_avg || {};
   const ratingLabels = {
@@ -396,7 +513,8 @@ export default function ReviewPage() {
         {/* All reviews header */}
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-[18px] font-bold text-[#1c1c1c]">
-            All reviews ({summary?.total_reviews_summarized || 1746})
+            All reviews (
+            {reviewsTotal || summary?.total_reviews_summarized || 0})
           </h3>
           <button className="border border-[#8B6914] text-[#8B6914] text-[12px] px-4 py-1.5 rounded">
             Write a review
@@ -418,47 +536,63 @@ export default function ReviewPage() {
               <path d="M1 1l3 3 3-3" stroke="#333" strokeWidth="1" />
             </svg>
           </div>
-          <div className="flex items-center border border-[#ccc] rounded px-3 py-1.5 flex-1 max-w-[200px]">
+          <form onSubmit={handleSearch} className="flex items-center border border-[#ccc] rounded px-3 py-1.5 flex-1 max-w-[250px]">
             <svg
               width="12"
               height="12"
               viewBox="0 0 12 12"
               fill="none"
-              className="mr-1.5"
+              className="mr-1.5 shrink-0"
             >
               <circle cx="5" cy="5" r="4" stroke="#999" strokeWidth="1" />
               <path d="M8 8l3 3" stroke="#999" strokeWidth="1" />
             </svg>
             <input
               type="text"
-              placeholder="Search reviews"
+              placeholder="Search reviews (semantic)"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="text-[12px] outline-none w-full bg-transparent"
             />
-          </div>
+            {isSearchActive && (
+              <button type="button" onClick={clearSearch} className="ml-1 text-[#999] hover:text-[#333] shrink-0">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </button>
+            )}
+          </form>
         </div>
 
         {/* Popular mentions */}
         <div className="mb-6">
           <span className="text-[12px] text-[#555] mr-2">Popular mentions</span>
           <div className="flex flex-wrap gap-2 mt-2">
-            {(summary?.highlights && summary?.lowlights
-              ? [...summary.highlights, ...summary.lowlights]
-              : [
-                  "courtyard fifth ave",
-                  "freezing room",
-                  "midtown central",
-                  "bryant park proximity",
-                  "valet parking",
-                  "staff helpful",
-                  "small rooms",
-                  "grand central access",
-                  "city view",
-                  "noise level",
-                ]
+            {(popularMentions.length > 0
+              ? popularMentions.map((m) => m.mention)
+              : summary?.highlights && summary?.lowlights
+                ? [...summary.highlights, ...summary.lowlights]
+                : [
+                    "courtyard fifth ave",
+                    "freezing room",
+                    "midtown central",
+                    "bryant park proximity",
+                    "valet parking",
+                    "staff helpful",
+                    "small rooms",
+                    "grand central access",
+                    "city view",
+                    "noise level",
+                  ]
             ).map((tag) => (
               <button
                 key={tag}
-                className="border border-[#ccc] rounded-full px-3 py-1 text-[11px] text-[#333] hover:bg-[#f5f5f5]"
+                onClick={() => handleMentionClick(tag)}
+                className={`border rounded-full px-3 py-1 text-[11px] transition-all ${
+                  selectedMention === tag
+                    ? "bg-[#1c1c1c] text-white border-[#1c1c1c]"
+                    : "border-[#ccc] text-[#333] hover:bg-[#f5f5f5]"
+                }`}
               >
                 {tag}
               </button>
@@ -469,117 +603,419 @@ export default function ReviewPage() {
         {/* Divider */}
         <hr className="border-[#e0e0e0] mb-6" />
 
-        {/* Review 1 - Jay P */}
-        <div className="flex justify-between pb-6 mb-6 border-b border-[#eee]">
-          <div className="flex max-w-[550px]">
-            <div className="w-[100px] shrink-0">
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <div className="w-[28px] h-[28px] rounded-full bg-[#e8e8e8] flex items-center justify-center">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <circle cx="7" cy="5" r="3" stroke="#999" strokeWidth="1" />
-                    <path
-                      d="M2 13c0-2.5 2.2-4 5-4s5 1.5 5 4"
-                      stroke="#999"
-                      strokeWidth="1"
-                    />
-                  </svg>
-                </div>
+        {/* Semantic search results */}
+        {isSearchActive && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-[13px] font-semibold text-[#1c1c1c]">
+                  Search results for "{searchQuery}"
+                </span>
+                <span className="text-[11px] text-[#999]">
+                  ({searchResults.length} results)
+                </span>
+                <span className="text-[9px] bg-[#EDE9FE] text-[#6D28D9] px-1.5 py-0.5 rounded">
+                  RAG
+                </span>
               </div>
-              <span className="text-[12px] font-medium text-[#333]">Jay P</span>
-              <div className="text-[10px] text-[#999]">250 contributions</div>
+              <button
+                onClick={clearSearch}
+                className="text-[11px] text-[#555] underline hover:text-[#000]"
+              >
+                Clear search
+              </button>
             </div>
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <RatingDots rating={1} />
-                <span className="text-[12px] text-[#333]">1</span>
-                <span className="text-[12px] text-[#999]">•</span>
-                <span className="text-[12px] text-[#999]">5 days ago</span>
-              </div>
-              <h4 className="text-[14px] font-bold text-[#1c1c1c] mb-2">
-                Room was Freezing
-              </h4>
-              <p className="text-[12px] text-[#333] leading-[1.6] mb-4">
-                The fact that customers could not control room temperature made
-                our stay a little uncomfortable. We had to sleep in layers. When
-                we asked if our room temperature was malfunctioning we were told
-                they controlled it and could only be changed if they received
-                enough complaints.
-              </p>
-              <div className="flex items-center gap-3 text-[11px] text-[#555]">
-                <span>Was it helpful?</span>
-                <button className="underline">Yes: 0</button>
-                <button className="underline">No: 0</button>
-              </div>
-            </div>
-          </div>
-          <div className="shrink-0">
-            <div className="flex flex-col gap-2">
-              <RatingBar label="Location" value={4.2} color="#8B6914" />
-              <RatingBar label="Service" value={3.8} color="#8B6914" />
-              <RatingBar
-                label="Value for the Money"
-                value={2}
-                color="#c0392b"
-              />
-            </div>
-          </div>
-        </div>
 
-        {/* Review 2 - Sarah L */}
-        <div className="flex justify-between pb-6">
-          <div className="flex max-w-[550px]">
-            <div className="w-[100px] shrink-0">
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <div className="w-[28px] h-[28px] rounded-full bg-[#e8e8e8] flex items-center justify-center">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <circle cx="7" cy="5" r="3" stroke="#999" strokeWidth="1" />
-                    <path
-                      d="M2 13c0-2.5 2.2-4 5-4s5 1.5 5 4"
-                      stroke="#999"
-                      strokeWidth="1"
-                    />
-                  </svg>
+            {searchLoading ? (
+              <div className="text-center py-8 text-[12px] text-[#999]">Searching...</div>
+            ) : searchResults.length === 0 ? (
+              <div className="text-center py-8 text-[12px] text-[#999]">No results found.</div>
+            ) : (
+              <div className="space-y-0">
+                {searchResults.map((result) => (
+                  <div key={result._id} className="flex justify-between pb-5 mb-5 border-b border-[#eee]">
+                    <div className="flex max-w-[550px]">
+                      <div className="w-[100px] shrink-0">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <div className="w-[28px] h-[28px] rounded-full bg-[#e8e8e8] flex items-center justify-center">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                              <circle cx="7" cy="5" r="3" stroke="#999" strokeWidth="1" />
+                              <path d="M2 13c0-2.5 2.2-4 5-4s5 1.5 5 4" stroke="#999" strokeWidth="1" />
+                            </svg>
+                          </div>
+                        </div>
+                        <span className="text-[12px] font-medium text-[#333]">
+                          {result.user_name || "Guest"}
+                        </span>
+                        <div className="text-[9px] text-[#8B6914] mt-0.5">
+                          Score: {result.score}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <RatingDots rating={getAvgSubRating(result.sub_ratings)} />
+                          <span className="text-[12px] text-[#333]">
+                            {getAvgSubRating(result.sub_ratings) || "-"}
+                          </span>
+                          {result.submission_time && (
+                            <>
+                              <span className="text-[12px] text-[#999]">•</span>
+                              <span className="text-[12px] text-[#999]">
+                                {new Date(result.submission_time).toLocaleDateString()}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                        {result.title && (
+                          <h4 className="text-[14px] font-bold text-[#1c1c1c] mb-2">{result.title}</h4>
+                        )}
+                        <p className="text-[12px] text-[#333] leading-[1.6] mb-3">{result.text}</p>
+                        {result.mentions?.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mb-2">
+                            {result.mentions.map((m) => (
+                              <span key={m} className="text-[10px] px-2 py-0.5 rounded-full bg-[#f0f0f0] text-[#555]">
+                                {m}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {result.sentiment && (
+                          <span
+                            className="text-[10px] px-2 py-0.5 rounded-full capitalize"
+                            style={{
+                              background: result.sentiment === "positive" ? "#DCFCE7" : result.sentiment === "negative" ? "#FEE2E2" : "#FEF3C7",
+                              color: result.sentiment === "positive" ? "#15803D" : result.sentiment === "negative" ? "#B91C1C" : "#B45309",
+                            }}
+                          >
+                            {result.sentiment}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {result.sub_ratings && Object.keys(result.sub_ratings).length > 0 && (
+                      <div className="shrink-0">
+                        <div>
+                          {Object.entries(result.sub_ratings).map(([key, value]) => (
+                            <ReviewRatingBar
+                              key={key}
+                              label={key.charAt(0).toUpperCase() + key.slice(1)}
+                              value={value}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+            <hr className="border-[#e0e0e0] mt-4 mb-6" />
+          </div>
+        )}
+
+        {/* Filtered reviews by mention */}
+        {selectedMention && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-[13px] font-semibold text-[#1c1c1c]">
+                  Reviews mentioning "{selectedMention}"
+                </span>
+                <span className="text-[11px] text-[#999]">
+                  ({mentionReviews.length} results)
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  setSelectedMention(null);
+                  setMentionReviews([]);
+                }}
+                className="text-[11px] text-[#555] underline hover:text-[#000]"
+              >
+                Clear filter
+              </button>
+            </div>
+
+            {mentionLoading ? (
+              <div className="text-center py-8 text-[12px] text-[#999]">
+                Loading reviews...
+              </div>
+            ) : mentionReviews.length === 0 ? (
+              <div className="text-center py-8 text-[12px] text-[#999]">
+                No reviews found for this mention.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {mentionReviews.map((review) => (
+                  <div
+                    key={review._id}
+                    className="flex justify-between pb-5 border-b border-[#eee]"
+                  >
+                    <div className="flex max-w-[550px]">
+                      <div className="w-[100px] shrink-0">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <div className="w-[28px] h-[28px] rounded-full bg-[#e8e8e8] flex items-center justify-center">
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 14 14"
+                              fill="none"
+                            >
+                              <circle
+                                cx="7"
+                                cy="5"
+                                r="3"
+                                stroke="#999"
+                                strokeWidth="1"
+                              />
+                              <path
+                                d="M2 13c0-2.5 2.2-4 5-4s5 1.5 5 4"
+                                stroke="#999"
+                                strokeWidth="1"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                        <span className="text-[12px] font-medium text-[#333]">
+                          {review.user_name || "Guest"}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <RatingDots rating={getAvgSubRating(review.sub_ratings)} />
+                          <span className="text-[12px] text-[#333]">
+                            {getAvgSubRating(review.sub_ratings) || "-"}
+                          </span>
+                          {review.submission_time && (
+                            <>
+                              <span className="text-[12px] text-[#999]">•</span>
+                              <span className="text-[12px] text-[#999]">
+                                {new Date(
+                                  review.submission_time,
+                                ).toLocaleDateString()}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                        {review.title && (
+                          <h4 className="text-[14px] font-bold text-[#1c1c1c] mb-2">
+                            {review.title}
+                          </h4>
+                        )}
+                        <p className="text-[12px] text-[#333] leading-[1.6] mb-3">
+                          {review.text}
+                        </p>
+                        {review.mentions?.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {review.mentions.map((m) => (
+                              <span
+                                key={m}
+                                className={`text-[10px] px-2 py-0.5 rounded-full ${
+                                  m === selectedMention
+                                    ? "bg-[#1c1c1c] text-white"
+                                    : "bg-[#f0f0f0] text-[#555]"
+                                }`}
+                              >
+                                {m}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2 mt-2">
+                          <span
+                            className="text-[10px] px-2 py-0.5 rounded-full capitalize"
+                            style={{
+                              background:
+                                review.sentiment === "positive"
+                                  ? "#DCFCE7"
+                                  : review.sentiment === "negative"
+                                    ? "#FEE2E2"
+                                    : "#FEF3C7",
+                              color:
+                                review.sentiment === "positive"
+                                  ? "#15803D"
+                                  : review.sentiment === "negative"
+                                    ? "#B91C1C"
+                                    : "#B45309",
+                            }}
+                          >
+                            {review.sentiment}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {review.sub_ratings &&
+                      Object.keys(review.sub_ratings).length > 0 && (
+                        <div className="shrink-0">
+                          <div>
+                            {Object.entries(review.sub_ratings).map(
+                              ([key, value]) => (
+                                <ReviewRatingBar
+                                  key={key}
+                                  label={key.charAt(0).toUpperCase() + key.slice(1)}
+                                  value={value}
+                                />
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
+                  </div>
+                ))}
+              </div>
+            )}
+            <hr className="border-[#e0e0e0] mt-6 mb-6" />
+          </div>
+        )}
+
+        {/* All reviews from backend */}
+        {reviewsLoading ? (
+          <div className="text-center py-8 text-[12px] text-[#999]">
+            Loading reviews...
+          </div>
+        ) : reviews.length === 0 ? (
+          <div className="text-center py-8 text-[12px] text-[#999]">
+            No reviews found.
+          </div>
+        ) : (
+          <div className="space-y-0">
+            {reviews.map((review) => (
+              <div
+                key={review._id}
+                className="flex justify-between pb-6 mb-6 border-b border-[#eee]"
+              >
+                <div className="flex max-w-[550px]">
+                  <div className="w-[100px] shrink-0">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <div className="w-[28px] h-[28px] rounded-full bg-[#e8e8e8] flex items-center justify-center">
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 14 14"
+                          fill="none"
+                        >
+                          <circle
+                            cx="7"
+                            cy="5"
+                            r="3"
+                            stroke="#999"
+                            strokeWidth="1"
+                          />
+                          <path
+                            d="M2 13c0-2.5 2.2-4 5-4s5 1.5 5 4"
+                            stroke="#999"
+                            strokeWidth="1"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <span className="text-[12px] font-medium text-[#333]">
+                      {review.user_name || "Guest"}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <RatingDots rating={getAvgSubRating(review.sub_ratings)} />
+                      <span className="text-[12px] text-[#333]">
+                        {getAvgSubRating(review.sub_ratings) || "-"}
+                      </span>
+                      {review.submission_time && (
+                        <>
+                          <span className="text-[12px] text-[#999]">•</span>
+                          <span className="text-[12px] text-[#999]">
+                            {new Date(
+                              review.submission_time,
+                            ).toLocaleDateString()}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    {review.title && (
+                      <h4 className="text-[14px] font-bold text-[#1c1c1c] mb-2">
+                        {review.title}
+                      </h4>
+                    )}
+                    <p className="text-[12px] text-[#333] leading-[1.6] mb-3">
+                      {review.text}
+                    </p>
+                    {review.mentions?.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {review.mentions.map((m) => (
+                          <span
+                            key={m}
+                            className="text-[10px] px-2 py-0.5 rounded-full bg-[#f0f0f0] text-[#555]"
+                          >
+                            {m}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {review.sentiment && (
+                      <span
+                        className="text-[10px] px-2 py-0.5 rounded-full capitalize"
+                        style={{
+                          background:
+                            review.sentiment === "positive"
+                              ? "#DCFCE7"
+                              : review.sentiment === "negative"
+                                ? "#FEE2E2"
+                                : "#FEF3C7",
+                          color:
+                            review.sentiment === "positive"
+                              ? "#15803D"
+                              : review.sentiment === "negative"
+                                ? "#B91C1C"
+                                : "#B45309",
+                        }}
+                      >
+                        {review.sentiment}
+                      </span>
+                    )}
+                  </div>
                 </div>
+                {review.sub_ratings &&
+                  Object.keys(review.sub_ratings).length > 0 && (
+                    <div className="shrink-0">
+                      <div>
+                        {Object.entries(review.sub_ratings).map(
+                          ([key, value]) => (
+                            <ReviewRatingBar
+                              key={key}
+                              label={key.charAt(0).toUpperCase() + key.slice(1)}
+                              value={value}
+                            />
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  )}
               </div>
-              <span className="text-[12px] font-medium text-[#333]">
-                Sarah L.
-              </span>
-              <div className="text-[10px] text-[#999]">16 contributions</div>
-            </div>
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <RatingDots rating={4} />
-                <span className="text-[12px] text-[#333]">4</span>
-                <span className="text-[12px] text-[#999]">•</span>
-                <span className="text-[12px] text-[#999]">2 days ago</span>
+            ))}
+
+            {/* Pagination */}
+            {reviewsTotal > 20 && (
+              <div className="flex items-center justify-center gap-4 pt-4">
+                <button
+                  onClick={() => fetchReviews(reviewsPage - 1)}
+                  disabled={reviewsPage === 0}
+                  className="text-[12px] px-3 py-1.5 border border-[#ccc] rounded disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#f5f5f5]"
+                >
+                  ← Previous
+                </button>
+                <span className="text-[12px] text-[#555]">
+                  Page {reviewsPage + 1} of {Math.ceil(reviewsTotal / 20)}
+                </span>
+                <button
+                  onClick={() => fetchReviews(reviewsPage + 1)}
+                  disabled={(reviewsPage + 1) * 20 >= reviewsTotal}
+                  className="text-[12px] px-3 py-1.5 border border-[#ccc] rounded disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#f5f5f5]"
+                >
+                  Next →
+                </button>
               </div>
-              <h4 className="text-[14px] font-bold text-[#1c1c1c] mb-2">
-                Great Location, Compact Room
-              </h4>
-              <p className="text-[12px] text-[#333] leading-[1.6] mb-4">
-                Great central spot noise from street and staff service ans staff
-                staff are welicat, and room size with the room size, rooms are
-                no arger and great size terrestre.
-              </p>
-              <div className="flex items-center gap-3 text-[11px] text-[#555]">
-                <span>Was it helpful?</span>
-                <button className="underline">Yes: 0</button>
-                <button className="underline">No: 0</button>
-              </div>
-            </div>
+            )}
           </div>
-          <div className="shrink-0">
-            <div className="flex flex-col gap-2">
-              <RatingBar label="Location" value={4.5} color="#8B6914" />
-              <RatingBar label="Service" value={4} color="#8B6914" />
-              <RatingBar
-                label="Value for the Money"
-                value={3.5}
-                color="#8B6914"
-              />
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

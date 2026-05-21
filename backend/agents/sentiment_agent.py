@@ -29,14 +29,15 @@ Enterprise KPI Alignment:
 Pipeline Position: Runs AFTER deduplication gate → feeds Trend Detection.
 """
 
+import time
 import logging
 from typing import List
-from langchain_google_genai import ChatGoogleGenerativeAI
 from core.models import (
     ReviewPipelineState, SentimentLabel, ReviewStatus,
     FeatureSentiment, EmojiSignal
 )
 from core.config import settings
+from core.llm_factory import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -93,12 +94,7 @@ def sentiment_analysis_agent(state: ReviewPipelineState) -> ReviewPipelineState:
     errors = list(state.get("errors", []))
     agent_messages = list(state.get("agent_messages", []))
 
-    llm = ChatGoogleGenerativeAI(
-        model=settings.GEMINI_MODEL,
-        google_api_key=settings.GOOGLE_API_KEY,
-        temperature=0.0,
-        max_output_tokens=256,
-    )
+    llm = get_llm(temperature=0.0, max_tokens=256)
 
     analyzable_statuses = {ReviewStatus.CLEAN, ReviewStatus.NEAR_DUPLICATE}
     to_analyze = [r for r in reviews if r.status in analyzable_statuses]
@@ -137,6 +133,8 @@ REVIEWS:
 
             response = llm.invoke(prompt)
             results = response.content.strip().split("\n")
+
+            time.sleep(1)
 
             # Handle mismatch safely
             if len(results) != len(batch):

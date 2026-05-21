@@ -1,0 +1,40 @@
+{
+  "NYCES": {
+    "hotel_id": "NYCES",
+    "hotel_name": "Courtyard New York Manhattan/Fifth Avenue",
+    "generated_at": "2026-05-21T09:23:04.028059",
+    "total_reviews_summarized": 20,
+    "digest_count": 1,
+    "narrative_summary": "The Courtyard New York Manhattan/Fifth Avenue is lauded by guests for its exceptionally welcoming and helpful service team, contributing to a generally pleasant atmosphere. Reviewers frequently highlight the hotel's commendable upkeep, noting a consistently clean environment throughout the property. Its prime Manhattan location is also a significant draw, placing visitors within easy reach of the city's iconic attractions.\n\nHowever, the guest experience is not without its drawbacks. Several visitors have pointed to the compact nature of the rooms, with some finding them less than ideal for extended stays. The bathrooms, too, have been described as functional but unremarkable. While the hotel offers a quiet retreat, the overall comfort level can be a point of contention for some.",
+    "categories": {
+      "Location": "Prime Manhattan",
+      "Rooms": "Compact",
+      "Cleanliness": "Spotless",
+      "Service": "Warm & Attentive",
+      "Dining": "Adequate",
+      "Value": "Fair"
+    },
+    "highlights": [
+      "exceptionally welcoming and helpful service team",
+      "commendable upkeep and clean environment",
+      "prime Manhattan location"
+    ],
+    "lowlights": [
+      "compact nature of the rooms",
+      "functional but unremarkable bathrooms",
+      "overall comfort level can be a point of contention"
+    ],
+    "avg_rating": null,
+    "sub_ratings_avg": {
+      "cleanliness": 3.37,
+      "location": 4.35,
+      "amenities": 3.21,
+      "dining": 3.4,
+      "service": 3.75,
+      "value": 2.85
+    },
+    "verdict": "This hotel offers a well-located and clean base with excellent service, best suited for travelers prioritizing location and staff attentiveness over expansive accommodations.",
+    "is_stale": false,
+    "last_digest_id": "batch_7392b0e6"
+  }
+}

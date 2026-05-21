@@ -3,6 +3,8 @@ import { Toaster } from "react-hot-toast";
 import Layout from "./components/shared/Layout";
 import LandingPage from "./pages/LandingPage";
 import DashboardPage from "./pages/DashboardPage";
+import HotelDashboardPage from "./pages/HotelDashboardPage";
+import PropertyDashboardPage from "./pages/PropertyDashboardPage";
 import UploadPage from "./pages/UploadPage";
 import ReviewPage from "./pages/ReviewPage";
 
@@ -30,6 +32,11 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/analyze" element={<UploadPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard/generic" element={<DashboardPage />} />
+          <Route
+            path="/dashboard/:propertyCode"
+            element={<PropertyDashboardPage />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

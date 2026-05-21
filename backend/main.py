@@ -21,7 +21,9 @@ from core.config import settings
 from core.models import AnalysisReport
 from core.pipeline import run_pipeline
 from data.synthetic_generator import generate_synthetic_dataset
-from langchain_google_genai import ChatGoogleGenerativeAI
+from core.llm_factory import get_llm, get_embeddings
+from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_core.documents import Document
 from langchain_core.messages import SystemMessage, HumanMessage
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(levelname)s: %(message)s")
@@ -43,22 +45,97 @@ app.add_middleware(
 
 
 @app.on_event("startup")
-async def verify_gemini_connection():
-    """Verify Gemini API connectivity on application startup."""
-    if not settings.GOOGLE_API_KEY:
-        logger.error("[Startup] GOOGLE_API_KEY is not set. LLM features will fail.")
+async def verify_llm_connection():
+    """Validate LLM and embedding provider connectivity on application startup."""
+    provider = settings.LLM_PROVIDER
+
+    if provider == "gemini" and not settings.GOOGLE_API_KEY:
+        logger.error("[Startup] LLM_PROVIDER=gemini but GOOGLE_API_KEY is not set.")
+        return
+    if provider == "litellm" and not settings.LITELLM_API_KEY:
+        logger.warning("[Startup] LLM_PROVIDER=litellm but LITELLM_API_KEY is empty.")
+    if provider == "googleADC" and not settings.GCP_PROJECT:
+        logger.error("[Startup] LLM_PROVIDER=googleADC but GCP_PROJECT is not set.")
         return
 
     try:
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GOOGLE_API_KEY,
-        )
-        logger.info(f"[Startup] Gemini API key configured (model={settings.GEMINI_MODEL}). Ready.")
+        llm = get_llm(max_tokens=10)
+        response = await asyncio.to_thread(llm.invoke, "Say OK")
+        content = response.content if hasattr(response, "content") else str(response)
+        logger.info(f"[Startup] LLM provider '{provider}' connected. Response: {content[:50].strip()}")
     except Exception as e:
-        logger.error(f"[Startup] Gemini connection FAILED: {e}")
-        logger.error("[Startup] Check your GOOGLE_API_KEY and GEMINI_MODEL in .env")
+        logger.error(f"[Startup] LLM connection FAILED ({provider}): {e}")
+        logger.error("[Startup] Check credentials and model settings in .env")
+
+    try:
+        from core.llm_factory import get_embeddings
+        emb = get_embeddings()
+        vectors = await asyncio.to_thread(emb.embed_query, "test")
+        dim = len(vectors) if vectors else 0
+        logger.info(f"[Startup] Embedding model connected. Dimensions: {dim}")
+    except Exception as e:
+        logger.error(f"[Startup] Embedding connection FAILED ({provider}): {e}")
+        logger.error("[Startup] Semantic search will not work until this is resolved.")
+
+
+# ─── In-Memory Vector Store ──────────────────────────────────────────────────
+_vector_store: Optional[InMemoryVectorStore] = None
+_vector_store_metadata: Dict[str, Any] = {}
+
+
+def _load_vector_store():
+    """Load pre-computed embeddings from hotel_reviews_processed.json into InMemoryVectorStore."""
+    global _vector_store, _vector_store_metadata
+    from core.hotel_pipeline import OUTPUT_FILE
+
+    if not os.path.exists(OUTPUT_FILE):
+        logger.warning("[VectorStore] No processed reviews file found. Semantic search unavailable.")
+        return
+
+    with open(OUTPUT_FILE, "r") as f:
+        docs = json.load(f)
+
+    docs_with_embeddings = [d for d in docs if d.get("embedding")]
+    if not docs_with_embeddings:
+        logger.warning("[VectorStore] No embeddings found in processed reviews.")
+        return
+
+    embeddings_model = get_embeddings()
+    _vector_store = InMemoryVectorStore(embedding=embeddings_model)
+
+    for doc in docs_with_embeddings:
+        doc_id = doc["_id"]
+        _vector_store.store[doc_id] = {
+            "id": doc_id,
+            "vector": doc["embedding"],
+            "text": doc.get("text", ""),
+            "metadata": {
+                "_id": doc_id,
+                "hotel_id": doc.get("hotel_id", ""),
+                "hotel_name": doc.get("hotel_name", ""),
+                "title": doc.get("title", ""),
+                "user_name": doc.get("user_name", ""),
+                "submission_time": doc.get("submission_time", ""),
+                "rating": doc.get("rating"),
+                "sentiment": doc.get("sentiment", ""),
+                "confidence": doc.get("confidence"),
+                "mentions": doc.get("mentions", []),
+                "categories": doc.get("categories", {}),
+                "sub_ratings": doc.get("sub_ratings", {}),
+                "locale": doc.get("locale", ""),
+                "language": doc.get("language", ""),
+            },
+        }
+
+    _vector_store_metadata["total_docs"] = len(docs_with_embeddings)
+    _vector_store_metadata["loaded_at"] = time.time()
+    logger.info(f"[VectorStore] Loaded {len(docs_with_embeddings)} documents with pre-computed embeddings (no re-embedding).")
+
+
+@app.on_event("startup")
+async def load_vector_store_on_startup():
+    """Load the InMemoryVectorStore with pre-computed embeddings at application start."""
+    await asyncio.to_thread(_load_vector_store)
 
 
 # In-memory job store (in production: use Redis)
@@ -358,16 +435,166 @@ async def analyze_text_reviews(
 
 @app.post("/api/analyze/demo")
 async def analyze_demo_dataset(background_tasks: BackgroundTasks):
-    """Run analysis on the built-in synthetic dataset (for demos)."""
-    reviews = generate_synthetic_dataset()
+    """
+    Run analysis on hotel reviews from hotel_reviews_processed.json.
+    Builds an AnalysisReport from pre-processed data grouped by property.
+    """
+    from core.hotel_pipeline import OUTPUT_FILE as HOTEL_OUTPUT
 
-    job_id = f"job_demo_{int(time.time() * 1000)}"
+    if not os.path.exists(HOTEL_OUTPUT):
+        reviews = generate_synthetic_dataset()
+        job_id = f"job_demo_{int(time.time() * 1000)}"
+        _jobs[job_id] = {"status": "queued", "review_count": len(reviews), "is_demo": True}
+        _job_progress[job_id] = []
+        background_tasks.add_task(run_analysis_job_safe, job_id, reviews)
+        return {"job_id": job_id, "review_count": len(reviews), "message": "Demo analysis started (synthetic)"}
+
+    with open(HOTEL_OUTPUT, "r") as f:
+        docs = json.load(f)
+
+    if not docs:
+        raise HTTPException(400, "No processed reviews found in hotel_reviews_processed.json")
+
+    reviews = []
+    for doc in docs:
+        sub_ratings = doc.get("sub_ratings", {})
+        rating = doc.get("rating")
+        if not rating and sub_ratings:
+            rating = round(sum(sub_ratings.values()) / len(sub_ratings), 1)
+        review = {
+            "review_text": doc.get("text", ""),
+            "rating": rating or 3.0,
+            "category": doc.get("hotel_name") or "Hotel",
+            "product_name": doc.get("hotel_name") or "Marriott Property",
+            "review_date": doc.get("submission_time", ""),
+            "verified_purchase": True,
+        }
+        for key, val in sub_ratings.items():
+            review[key] = val
+        reviews.append(review)
+
+    job_id = f"job_hotel_{int(time.time() * 1000)}"
     _jobs[job_id] = {"status": "queued", "review_count": len(reviews), "is_demo": True}
     _job_progress[job_id] = []
 
     background_tasks.add_task(run_analysis_job_safe, job_id, reviews)
 
-    return {"job_id": job_id, "review_count": len(reviews), "message": "Demo analysis started"}
+    return {"job_id": job_id, "review_count": len(reviews), "message": "Hotel review analysis started"}
+
+
+# ─── Per-Property Analysis with Cache ─────────────────────────────────────────
+PROPERTY_ANALYSIS_CACHE = os.path.join(os.path.dirname(__file__), "data", "property_analysis_cache.json")
+
+
+def _load_property_cache() -> Dict[str, Any]:
+    if os.path.exists(PROPERTY_ANALYSIS_CACHE):
+        with open(PROPERTY_ANALYSIS_CACHE, "r") as f:
+            return json.load(f)
+    return {}
+
+
+def _save_property_cache(cache: Dict[str, Any]):
+    with open(PROPERTY_ANALYSIS_CACHE, "w") as f:
+        json.dump(cache, f, indent=2, default=str)
+
+
+@app.get("/api/analyze/property/{property_code}")
+async def get_property_analysis(property_code: str):
+    """
+    Get cached analysis for a property. Returns the report if it exists in cache.
+    If not cached, returns 404 — use POST to trigger analysis.
+    """
+    cache = _load_property_cache()
+    if property_code in cache:
+        return {
+            "status": "complete",
+            "property_code": property_code,
+            "report": cache[property_code]["report"],
+            "cached_at": cache[property_code].get("cached_at"),
+            "review_count": cache[property_code].get("review_count", 0),
+        }
+    raise HTTPException(404, f"No cached analysis for property '{property_code}'. POST to trigger analysis.")
+
+
+@app.post("/api/analyze/property/{property_code}")
+async def trigger_property_analysis(
+    property_code: str,
+    background_tasks: BackgroundTasks,
+    force_refresh: bool = False,
+):
+    """
+    Trigger analysis pipeline for a specific property from hotel_reviews_processed.json.
+    Results are cached in property_analysis_cache.json. Use force_refresh=true to re-run.
+    """
+    cache = _load_property_cache()
+    if not force_refresh and property_code in cache:
+        return {
+            "status": "complete",
+            "property_code": property_code,
+            "report": cache[property_code]["report"],
+            "cached_at": cache[property_code].get("cached_at"),
+            "review_count": cache[property_code].get("review_count", 0),
+            "from_cache": True,
+        }
+
+    from core.hotel_pipeline import OUTPUT_FILE as HOTEL_OUTPUT
+    if not os.path.exists(HOTEL_OUTPUT):
+        raise HTTPException(404, "No processed reviews file found. Run ingestion first.")
+
+    with open(HOTEL_OUTPUT, "r") as f:
+        docs = json.load(f)
+
+    property_docs = [d for d in docs if d.get("hotel_id") == property_code]
+    if not property_docs:
+        raise HTTPException(404, f"No reviews found for property '{property_code}'")
+
+    reviews = []
+    for doc in property_docs:
+        sub_ratings = doc.get("sub_ratings", {})
+        rating = doc.get("rating")
+        if not rating and sub_ratings:
+            rating = round(sum(sub_ratings.values()) / len(sub_ratings), 1)
+        review = {
+            "review_text": doc.get("text", ""),
+            "rating": rating or 3.0,
+            "category": doc.get("hotel_name") or "Hotel",
+            "product_name": doc.get("hotel_name") or property_code,
+            "review_date": doc.get("submission_time", ""),
+            "title": doc.get("title", ""),
+            "user_name": doc.get("user_name", ""),
+            "hotel_id": property_code,
+            "verified_purchase": True,
+        }
+        for key, val in sub_ratings.items():
+            review[key] = val
+        reviews.append(review)
+
+    job_id = f"job_property_{property_code}_{int(time.time() * 1000)}"
+    _jobs[job_id] = {"status": "queued", "review_count": len(reviews), "is_demo": True, "property_code": property_code}
+    _job_progress[job_id] = []
+
+    async def _run_and_cache():
+        await run_analysis_job_safe(job_id, reviews)
+        job = _jobs.get(job_id, {})
+        if job.get("status") == "complete" and job.get("report"):
+            cache = _load_property_cache()
+            cache[property_code] = {
+                "report": job["report"],
+                "cached_at": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "review_count": len(reviews),
+                "hotel_name": property_docs[0].get("hotel_name", property_code),
+            }
+            _save_property_cache(cache)
+
+    background_tasks.add_task(_run_and_cache)
+
+    return {
+        "job_id": job_id,
+        "property_code": property_code,
+        "review_count": len(reviews),
+        "message": f"Analysis triggered for property '{property_code}'",
+        "from_cache": False,
+    }
 
 
 @app.get("/api/jobs/{job_id}")
@@ -916,7 +1143,17 @@ async def generate_executive_brief(request: BriefRequest):
     sentiment_dist = report.get("overall_sentiment_distribution", {})
     recs  = report.get("recommendations", [])[:5]
     alerts = report.get("trend_alerts", [])[:3]
-    product = report.get("product_name", report.get("report_id", "Unknown Product"))
+    product = report.get("product_name") or report.get("hotel_name")
+    if not product:
+        reviews_list = report.get("processed_reviews", [])
+        for r in reviews_list:
+            name = r.get("product_name", "")
+            if name and name != "Hotel" and not name.startswith("job_"):
+                product = name
+                break
+    if not product:
+        cats = report.get("product_categories", [])
+        product = cats[0] if cats else report.get("report_id", "Unknown Property")
     avg_rating = report.get("average_rating", None)
 
     context_summary = {
@@ -960,12 +1197,7 @@ async def generate_executive_brief(request: BriefRequest):
     )
 
     try:
-        llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GOOGLE_API_KEY,
-            temperature=0.3,
-            max_output_tokens=1024,
-        )
+        llm = get_llm(temperature=0.3, max_tokens=1024)
 
         response = llm.invoke([
             SystemMessage(content=system_prompt),
@@ -1113,12 +1345,7 @@ async def chat_with_dashboard(request: ChatRequest):
     )
 
     try:
-        llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GOOGLE_API_KEY,
-            temperature=0.2,
-            max_output_tokens=512,
-        )
+        llm = get_llm(temperature=0.2, max_tokens=512)
 
         response = llm.invoke([
             SystemMessage(content=system_prompt),
@@ -1194,15 +1421,33 @@ async def ingest_hotel_reviews(
             _hotel_jobs[job_id]["status"] = "running"
             _hotel_jobs[job_id]["started_at"] = time.time()
 
-            final_state = await run_hotel_pipeline(
-                raw_reviews=reviews,
-                hotel_id=hotel_id,
-            )
+            BATCH_SIZE = 100
+            total_exported = 0
+            all_errors = []
+            batches = [reviews[i:i + BATCH_SIZE] for i in range(0, len(reviews), BATCH_SIZE)]
+            _hotel_jobs[job_id]["total_batches"] = len(batches)
+            _hotel_jobs[job_id]["completed_batches"] = 0
+
+            for batch_idx, batch in enumerate(batches):
+                logger.info(f"[HotelJob {job_id}] Processing batch {batch_idx + 1}/{len(batches)} ({len(batch)} reviews)")
+                _hotel_jobs[job_id]["current_batch"] = batch_idx + 1
+
+                final_state = await run_hotel_pipeline(
+                    raw_reviews=batch,
+                    hotel_id=hotel_id,
+                )
+
+                total_exported += final_state.get("progress", {}).get("total_exported", 0)
+                all_errors.extend(final_state.get("errors", []))
+                _hotel_jobs[job_id]["completed_batches"] = batch_idx + 1
+
+                if batch_idx < len(batches) - 1:
+                    await asyncio.sleep(2)
 
             _hotel_jobs[job_id]["status"] = "complete"
-            _hotel_jobs[job_id]["progress"] = final_state.get("progress", {})
-            _hotel_jobs[job_id]["errors"] = final_state.get("errors", [])
-            _hotel_jobs[job_id]["doc_count"] = final_state.get("progress", {}).get("total_exported", 0)
+            _hotel_jobs[job_id]["doc_count"] = total_exported
+            _hotel_jobs[job_id]["errors"] = all_errors
+            _hotel_jobs[job_id]["progress"] = {"total_exported": total_exported}
         except Exception as e:
             logger.error(f"[HotelJob {job_id}] Failed: {e}", exc_info=True)
             _hotel_jobs[job_id]["status"] = "failed"
@@ -1323,6 +1568,100 @@ async def search_hotel_reviews(
     }
 
 
+@app.get("/api/hotel-reviews/semantic-search")
+async def semantic_search_hotel_reviews(
+    q: str,
+    hotel_id: str = "hotel_default",
+    top_k: int = 10,
+    min_score: float = 0.3,
+    sentiment: Optional[str] = None,
+    tag: Optional[str] = None,
+):
+    """
+    Semantic search over hotel reviews using LangChain InMemoryVectorStore
+    with cosine similarity. Pre-loaded at startup from hotel_reviews_processed.json.
+
+    The store uses cosine_similarity from langchain_community to rank results.
+    Supports metadata-based filtering for hotel_id, sentiment, and mention tags.
+
+    Args:
+        q: Natural language search query (e.g. "quiet room away from elevator")
+        hotel_id: Filter to a specific hotel
+        top_k: Number of top results to return
+        min_score: Minimum cosine similarity threshold (0-1)
+        sentiment: Optional filter by sentiment (positive/negative/neutral)
+        tag: Optional filter by mention tag
+    """
+    if not q.strip():
+        raise HTTPException(400, "Query parameter 'q' is required")
+
+    if _vector_store is None:
+        raise HTTPException(503, "Vector store not loaded. Run ingestion first or restart server.")
+
+    def _metadata_filter(doc: Document) -> bool:
+        meta = doc.metadata
+        if meta.get("hotel_id") != hotel_id:
+            return False
+        if sentiment and meta.get("sentiment") != sentiment.lower():
+            return False
+        if tag and tag.lower() not in [m.lower() for m in meta.get("mentions", [])]:
+            return False
+        return True
+
+    def _run_search():
+        return _vector_store._similarity_search_with_score_by_vector(
+            embedding=_vector_store.embedding.embed_query(q),
+            k=top_k,
+            filter=_metadata_filter,
+        )
+
+    results_with_scores = await asyncio.to_thread(_run_search)
+
+    results = []
+    for doc, score, _ in results_with_scores:
+        if score < min_score:
+            continue
+        results.append({
+            "_id": doc.metadata.get("_id"),
+            "score": round(float(score), 4),
+            "hotel_id": doc.metadata.get("hotel_id"),
+            "hotel_name": doc.metadata.get("hotel_name"),
+            "text": doc.page_content,
+            "title": doc.metadata.get("title", ""),
+            "user_name": doc.metadata.get("user_name", ""),
+            "submission_time": doc.metadata.get("submission_time", ""),
+            "rating": doc.metadata.get("rating"),
+            "sub_ratings": doc.metadata.get("sub_ratings", {}),
+            "sentiment": doc.metadata.get("sentiment"),
+            "categories": doc.metadata.get("categories", {}),
+            "mentions": doc.metadata.get("mentions", []),
+        })
+
+    return {
+        "query": q,
+        "hotel_id": hotel_id,
+        "results": results,
+        "total_matches": len(results),
+        "top_k": top_k,
+        "min_score": min_score,
+        "similarity_metric": "cosine",
+        "filters_applied": {
+            "sentiment": sentiment,
+            "tag": tag,
+        },
+    }
+
+
+@app.post("/api/hotel-reviews/vector-store/reload")
+async def reload_vector_store():
+    """Reload the in-memory vector store from disk (call after new ingestion)."""
+    await asyncio.to_thread(_load_vector_store)
+    return {
+        "status": "reloaded",
+        "total_docs": _vector_store_metadata.get("total_docs", 0),
+    }
+
+
 @app.get("/api/hotel-reviews/stats")
 async def get_hotel_review_stats(hotel_id: str = "hotel_default"):
     """Get summary statistics for processed hotel reviews."""
@@ -1401,4 +1740,83 @@ async def get_pipeline_graph():
 </body>
 </html>"""
     return HTMLResponse(content=html)
+
+
+@app.get("/api/hotel-reviews/data")
+async def get_hotel_reviews_data(
+    hotel_id: Optional[str] = None,
+    page: int = 0,
+    page_size: int = 50,
+):
+    """
+    Return all processed hotel reviews from the JSON store.
+    Supports optional hotel_id filter and pagination.
+    """
+    if not os.path.exists(OUTPUT_FILE):
+        return {"reviews": [], "total": 0, "page": page, "page_size": page_size}
+
+    with open(OUTPUT_FILE, "r") as f:
+        docs = json.load(f)
+
+    if hotel_id:
+        docs = [d for d in docs if d.get("hotel_id") == hotel_id]
+
+    total = len(docs)
+    start = page * page_size
+    page_docs = docs[start:start + page_size]
+
+    results = []
+    for doc in page_docs:
+        results.append({
+            "_id": doc.get("_id"),
+            "hotel_id": doc.get("hotel_id"),
+            "hotel_name": doc.get("hotel_name"),
+            "text": doc.get("text"),
+            "title": doc.get("title", ""),
+            "user_name": doc.get("user_name", ""),
+            "locale": doc.get("locale", ""),
+            "submission_time": doc.get("submission_time", ""),
+            "rating": doc.get("rating"),
+            "sub_ratings": doc.get("sub_ratings", {}),
+            "sentiment": doc.get("sentiment"),
+            "confidence": doc.get("confidence"),
+            "categories": doc.get("categories", {}),
+            "mentions": doc.get("mentions", []),
+            "language": doc.get("language", ""),
+        })
+
+    return {
+        "reviews": results,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+    }
+
+
+@app.get("/api/hotel-reviews/properties")
+async def list_properties():
+    """Return distinct properties available in the processed reviews store."""
+    if not os.path.exists(OUTPUT_FILE):
+        return {"properties": []}
+
+    with open(OUTPUT_FILE, "r") as f:
+        docs = json.load(f)
+
+    props: Dict[str, Any] = {}
+    for doc in docs:
+        hid = doc.get("hotel_id")
+        if hid and hid not in props:
+            sub_ratings = doc.get("sub_ratings", {})
+            rating = doc.get("rating")
+            if not rating and sub_ratings:
+                rating = round(sum(sub_ratings.values()) / len(sub_ratings), 1)
+            props[hid] = {
+                "property_code": hid,
+                "hotel_name": doc.get("hotel_name", hid),
+                "review_count": 0,
+            }
+        if hid:
+            props[hid]["review_count"] += 1
+
+    return {"properties": list(props.values())}
 

@@ -38,14 +38,15 @@ Pipeline Position: Runs AFTER report_synthesis → feeds Embedding Generation.
 """
 import json
 import re
+import time
 import logging
 from typing import List
 
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
 
 from core.config import settings
 from core.models import ReviewPipelineState, ReviewStatus
+from core.llm_factory import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -100,12 +101,7 @@ def mentions_extraction_agent(state: ReviewPipelineState) -> ReviewPipelineState
 
     logger.info(f"[MentionsAgent] Extracting mentions from {len(analyzable)} reviews")
 
-    llm = ChatGoogleGenerativeAI(
-        model=settings.GEMINI_MODEL,
-        google_api_key=settings.GOOGLE_API_KEY,
-        temperature=0.0,
-        max_output_tokens=4096,
-    )
+    llm = get_llm(temperature=0.0, max_tokens=4096)
 
     BATCH_SIZE = 20
 
@@ -132,6 +128,8 @@ def mentions_extraction_agent(state: ReviewPipelineState) -> ReviewPipelineState
         except Exception as e:
             logger.warning(f"[MentionsAgent] Batch {i//BATCH_SIZE} failed: {e}")
             errors.append(f"Mentions batch error: {str(e)}")
+
+        time.sleep(1)
 
     state["analyzed_reviews"] = reviews
     state["errors"] = errors

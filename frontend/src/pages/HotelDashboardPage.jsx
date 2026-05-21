@@ -51,7 +51,7 @@ function ChartTooltip({ active, payload }) {
 }
 
 function OverviewTab() {
-  const { getStats, getRatingDistribution, getTopMentions, getCategoryScores } = useHotelStore()
+  const { getStats, getRatingDistribution, getTopMentions, getCategoryScores, selectMention, selectedMention } = useHotelStore()
   const stats = getStats()
   const ratingDist = getRatingDistribution()
   const topMentions = getTopMentions()
@@ -111,7 +111,14 @@ function OverviewTab() {
           <h3 className="text-sm font-semibold text-gray-900 mb-4">Top Guest Mentions</h3>
           <div className="space-y-2 max-h-[200px] overflow-y-auto">
             {topMentions.map(({ mention, count }, i) => (
-              <div key={mention} className="flex items-center justify-between">
+              <button
+                key={mention}
+                onClick={() => { selectMention(mention); }}
+                className={clsx(
+                  "flex items-center justify-between w-full text-left px-2 py-1 rounded-lg transition-all",
+                  selectedMention === mention ? "bg-orange-50 ring-1 ring-orange-300" : "hover:bg-gray-50"
+                )}
+              >
                 <span className="text-xs text-gray-700 truncate max-w-[200px]">{mention}</span>
                 <div className="flex items-center gap-2">
                   <div className="h-2 rounded-full bg-gray-100" style={{ width: '80px' }}>
@@ -125,7 +132,7 @@ function OverviewTab() {
                   </div>
                   <span className="text-xs font-semibold text-gray-500 w-6 text-right">{count}</span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -310,8 +317,8 @@ function CategoriesTab() {
 }
 
 function ReviewsTab() {
-  const { getFilteredReviews, selectedSentiment, setSelectedSentiment, searchQuery, setSearchQuery } = useHotelStore()
-  const reviews = getFilteredReviews()
+  const { getFilteredReviews, selectedSentiment, setSelectedSentiment, searchQuery, setSearchQuery, selectMention, clearMention, selectedMention, mentionReviews, mentionLoading } = useHotelStore()
+  const reviews = selectedMention ? mentionReviews : getFilteredReviews()
 
   return (
     <div className="space-y-4">
@@ -347,6 +354,22 @@ function ReviewsTab() {
         <span className="text-xs text-gray-500 ml-auto">{reviews.length} reviews</span>
       </div>
 
+      {/* Active mention filter indicator */}
+      {selectedMention && (
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-50 border border-orange-200">
+          <span className="text-xs text-orange-800">
+            Showing reviews mentioning: <strong>"{selectedMention}"</strong>
+          </span>
+          <button
+            onClick={clearMention}
+            className="ml-auto text-xs text-orange-600 hover:text-orange-900 underline"
+          >
+            Clear filter
+          </button>
+          {mentionLoading && <Loader2 size={12} className="animate-spin text-orange-500" />}
+        </div>
+      )}
+
       {/* Reviews list */}
       <div className="space-y-3">
         {reviews.slice(0, 50).map((review, i) => (
@@ -381,13 +404,25 @@ function ReviewsTab() {
                 {review.sentiment}
               </span>
             </div>
+            {review.title && (
+              <p className="text-xs font-semibold text-gray-900 mb-1">{review.title}</p>
+            )}
             <p className="text-xs text-gray-700 leading-relaxed line-clamp-3">{review.text}</p>
             {review.mentions?.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {review.mentions.slice(0, 5).map(m => (
-                  <span key={m} className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                  <button
+                    key={m}
+                    onClick={() => selectMention(m)}
+                    className={clsx(
+                      'text-[10px] px-2 py-0.5 rounded-full transition-all cursor-pointer',
+                      selectedMention === m
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-orange-100 hover:text-orange-700'
+                    )}
+                  >
                     {m}
-                  </span>
+                  </button>
                 ))}
               </div>
             )}

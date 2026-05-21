@@ -16,6 +16,8 @@ export const useReviewStore = create((set, get) => ({
   // Actions
   setActiveTab: (tab) => set({ activeTab: tab }),
   setSelectedCategory: (cat) => set({ selectedCategory: cat }),
+  setReport: (report) => set({ report, jobStatus: "complete" }),
+  setJobStatus: (status) => set({ jobStatus: status }),
 
   startDemoAnalysis: async () => {
     set({

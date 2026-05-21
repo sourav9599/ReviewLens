@@ -1,0 +1,1980 @@
+{
+  "NYCES": {
+    "report": {
+      "report_id": "ec07b54a-943",
+      "created_at": "2026-05-21T11:35:39.509880",
+      "total_reviews": 20,
+      "clean_reviews": 20,
+      "duplicate_count": 0,
+      "bot_suspected_count": 0,
+      "flagged_count": 0,
+      "languages_detected": [
+        "da",
+        "en"
+      ],
+      "product_categories": [
+        "Courtyard New York Manhattan/Fifth Avenue"
+      ],
+      "overall_sentiment_distribution": {
+        "neutral": 0.45,
+        "positive": 0.4,
+        "negative": 0.15
+      },
+      "feature_summary": {
+        "room": {
+          "total_mentions": 11,
+          "positive": 1,
+          "negative": 2,
+          "neutral": 8,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.477,
+          "complaint_rate": 0.182,
+          "praise_rate": 0.091,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "f7e1bea8",
+              "sentiment": "neutral",
+              "excerpt": "The staff here were very friendly, professional, and courteous, which made for a welcoming check-in.",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "1440f80b",
+              "sentiment": "neutral",
+              "excerpt": "The fact that customers could not control room temperature made our stay a little uncomfortable. We ",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "a0bf0310",
+              "sentiment": "positive",
+              "excerpt": "Courtyard by Marriott is an amazing hotel. Pleasant staff, beautiful clean rooms and great service i",
+              "confidence": 0.55,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "cleanliness": {
+          "total_mentions": 10,
+          "positive": 5,
+          "negative": 1,
+          "neutral": 4,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.51,
+          "complaint_rate": 0.1,
+          "praise_rate": 0.5,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "f7e1bea8",
+              "sentiment": "neutral",
+              "excerpt": "The staff here were very friendly, professional, and courteous, which made for a welcoming check-in.",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "a0bf0310",
+              "sentiment": "positive",
+              "excerpt": "Courtyard by Marriott is an amazing hotel. Pleasant staff, beautiful clean rooms and great service i",
+              "confidence": 0.55,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "9ce00435",
+              "sentiment": "positive",
+              "excerpt": "This hotel is located in a safe area of Mid-town and walking distance to many NYC restaurants and si",
+              "confidence": 0.55,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "service": {
+          "total_mentions": 10,
+          "positive": 6,
+          "negative": 1,
+          "neutral": 3,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.52,
+          "complaint_rate": 0.1,
+          "praise_rate": 0.6,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "f7e1bea8",
+              "sentiment": "neutral",
+              "excerpt": "The staff here were very friendly, professional, and courteous, which made for a welcoming check-in.",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "f95ed3ea",
+              "sentiment": "neutral",
+              "excerpt": "See the title there were roaches, the staff was helpful and kind. But there are roaches.",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "a0bf0310",
+              "sentiment": "positive",
+              "excerpt": "Courtyard by Marriott is an amazing hotel. Pleasant staff, beautiful clean rooms and great service i",
+              "confidence": 0.55,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "bathroom": {
+          "total_mentions": 2,
+          "positive": 0,
+          "negative": 0,
+          "neutral": 2,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.45,
+          "complaint_rate": 0.0,
+          "praise_rate": 0.0,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "f7e1bea8",
+              "sentiment": "neutral",
+              "excerpt": "The staff here were very friendly, professional, and courteous, which made for a welcoming check-in.",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "2f3193be",
+              "sentiment": "neutral",
+              "excerpt": "If you're looking for small overpriced rooms that scream 1987 this is your place. Carpet in room mad",
+              "confidence": 0.45,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "check_in": {
+          "total_mentions": 3,
+          "positive": 0,
+          "negative": 1,
+          "neutral": 2,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.483,
+          "complaint_rate": 0.333,
+          "praise_rate": 0.0,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "f7e1bea8",
+              "sentiment": "neutral",
+              "excerpt": "The staff here were very friendly, professional, and courteous, which made for a welcoming check-in.",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "931bbc46",
+              "sentiment": "neutral",
+              "excerpt": "I was nervous about driving into the City for this stay, but getting to the hotel, and even parking ",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "99e714f3",
+              "sentiment": "negative",
+              "excerpt": "I took a red eye from California and requested for eqlry checkin so i could be at my business meetin",
+              "confidence": 0.55,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "amenities": {
+          "total_mentions": 3,
+          "positive": 0,
+          "negative": 0,
+          "neutral": 3,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.45,
+          "complaint_rate": 0.0,
+          "praise_rate": 0.0,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "f7e1bea8",
+              "sentiment": "neutral",
+              "excerpt": "The staff here were very friendly, professional, and courteous, which made for a welcoming check-in.",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "1e4e3c4f",
+              "sentiment": "neutral",
+              "excerpt": "Overall, location was fine and close to meetings I needed to attend in the area. Room was dated and ",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "ad1e94a8",
+              "sentiment": "neutral",
+              "excerpt": "Very outdated hotel, small rooms and requires major remodeling. The gym can only fit 3 people! Unrea",
+              "confidence": 0.45,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "location": {
+          "total_mentions": 6,
+          "positive": 3,
+          "negative": 1,
+          "neutral": 2,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.517,
+          "complaint_rate": 0.167,
+          "praise_rate": 0.5,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "9ce00435",
+              "sentiment": "positive",
+              "excerpt": "This hotel is located in a safe area of Mid-town and walking distance to many NYC restaurants and si",
+              "confidence": 0.55,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "de42c8eb",
+              "sentiment": "positive",
+              "excerpt": "I highly recommend this hotel for your next stay in New York City. The hotel is conveniently located",
+              "confidence": 0.55,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "931bbc46",
+              "sentiment": "neutral",
+              "excerpt": "I was nervous about driving into the City for this stay, but getting to the hotel, and even parking ",
+              "confidence": 0.45,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "dining": {
+          "total_mentions": 4,
+          "positive": 3,
+          "negative": 0,
+          "neutral": 1,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.525,
+          "complaint_rate": 0.0,
+          "praise_rate": 0.75,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "9ce00435",
+              "sentiment": "positive",
+              "excerpt": "This hotel is located in a safe area of Mid-town and walking distance to many NYC restaurants and si",
+              "confidence": 0.55,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "de42c8eb",
+              "sentiment": "positive",
+              "excerpt": "I highly recommend this hotel for your next stay in New York City. The hotel is conveniently located",
+              "confidence": 0.55,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "e484aa49",
+              "sentiment": "positive",
+              "excerpt": "So clean, so friendly! Loved the 24 hour coffee and water. And it was so quiet",
+              "confidence": 0.55,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "value": {
+          "total_mentions": 2,
+          "positive": 1,
+          "negative": 0,
+          "neutral": 1,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.5,
+          "complaint_rate": 0.0,
+          "praise_rate": 0.5,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "de42c8eb",
+              "sentiment": "positive",
+              "excerpt": "I highly recommend this hotel for your next stay in New York City. The hotel is conveniently located",
+              "confidence": 0.55,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "2f3193be",
+              "sentiment": "neutral",
+              "excerpt": "If you're looking for small overpriced rooms that scream 1987 this is your place. Carpet in room mad",
+              "confidence": 0.45,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "noise": {
+          "total_mentions": 4,
+          "positive": 2,
+          "negative": 0,
+          "neutral": 2,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.5,
+          "complaint_rate": 0.0,
+          "praise_rate": 0.5,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "e484aa49",
+              "sentiment": "positive",
+              "excerpt": "So clean, so friendly! Loved the 24 hour coffee and water. And it was so quiet",
+              "confidence": 0.55,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "931bbc46",
+              "sentiment": "neutral",
+              "excerpt": "I was nervous about driving into the City for this stay, but getting to the hotel, and even parking ",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "0e29322c",
+              "sentiment": "positive",
+              "excerpt": "Very quiet, very clean, staff was very attentive when I had a need!",
+              "confidence": 0.55,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "lobby": {
+          "total_mentions": 2,
+          "positive": 0,
+          "negative": 0,
+          "neutral": 2,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.45,
+          "complaint_rate": 0.0,
+          "praise_rate": 0.0,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "2f3193be",
+              "sentiment": "neutral",
+              "excerpt": "If you're looking for small overpriced rooms that scream 1987 this is your place. Carpet in room mad",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "931bbc46",
+              "sentiment": "neutral",
+              "excerpt": "I was nervous about driving into the City for this stay, but getting to the hotel, and even parking ",
+              "confidence": 0.45,
+              "emoji_count": 0
+            }
+          ]
+        },
+        "parking": {
+          "total_mentions": 2,
+          "positive": 0,
+          "negative": 0,
+          "neutral": 2,
+          "mixed": 0,
+          "sarcastic": 0,
+          "ambiguous": 0,
+          "avg_confidence": 0.45,
+          "complaint_rate": 0.0,
+          "praise_rate": 0.0,
+          "top_excerpts": [],
+          "representative_reviews": [
+            {
+              "review_id": "931bbc46",
+              "sentiment": "neutral",
+              "excerpt": "I was nervous about driving into the City for this stay, but getting to the hotel, and even parking ",
+              "confidence": 0.45,
+              "emoji_count": 0
+            },
+            {
+              "review_id": "d9adb15f",
+              "sentiment": "neutral",
+              "excerpt": "My 15 year old son and I spent a few days in Manhattan for spring break. This hotel worked out well ",
+              "confidence": 0.45,
+              "emoji_count": 0
+            }
+          ]
+        }
+      },
+      "trend_alerts": [
+        {
+          "alert_id": "0fce622a",
+          "severity": "warning",
+          "feature": "cleanliness",
+          "alert_type": "emerging_complaint",
+          "description": "Emerging complaint detected for 'cleanliness': complaint rate increased from 0% to 20% (+2000%) in latest batch. Affecting 1 reviews.",
+          "current_rate": 0.2,
+          "previous_rate": 0.0,
+          "change_percent": 2000.0,
+          "z_score": 0.0,
+          "affected_reviews": [
+            "58098834"
+          ],
+          "first_detected_at": "2026-05-21T11:35:27.806920",
+          "is_systemic": false
+        },
+        {
+          "alert_id": "91451c02",
+          "severity": "warning",
+          "feature": "service",
+          "alert_type": "emerging_complaint",
+          "description": "Emerging complaint detected for 'service': complaint rate increased from 14% to 25% (+75%) in latest batch. Affecting 1 reviews.",
+          "current_rate": 0.25,
+          "previous_rate": 0.143,
+          "change_percent": 74.8,
+          "z_score": 0.0,
+          "affected_reviews": [
+            "2bba6222"
+          ],
+          "first_detected_at": "2026-05-21T11:35:27.806955",
+          "is_systemic": false
+        }
+      ],
+      "trend_data": [
+        {
+          "window_index": 0,
+          "window_start": 0,
+          "window_end": 10,
+          "feature": "room",
+          "sentiment_distribution": {
+            "neutral": 0.8,
+            "positive": 0.2
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.2,
+          "review_count": 5
+        },
+        {
+          "window_index": 0,
+          "window_start": 0,
+          "window_end": 10,
+          "feature": "cleanliness",
+          "sentiment_distribution": {
+            "neutral": 0.2,
+            "positive": 0.8
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.8,
+          "review_count": 5
+        },
+        {
+          "window_index": 0,
+          "window_start": 0,
+          "window_end": 10,
+          "feature": "service",
+          "sentiment_distribution": {
+            "neutral": 0.333,
+            "positive": 0.667
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.667,
+          "review_count": 6
+        },
+        {
+          "window_index": 0,
+          "window_start": 0,
+          "window_end": 10,
+          "feature": "bathroom",
+          "sentiment_distribution": {
+            "neutral": 1.0
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.0,
+          "review_count": 2
+        },
+        {
+          "window_index": 0,
+          "window_start": 0,
+          "window_end": 10,
+          "feature": "location",
+          "sentiment_distribution": {
+            "positive": 1.0
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 1.0,
+          "review_count": 2
+        },
+        {
+          "window_index": 0,
+          "window_start": 0,
+          "window_end": 10,
+          "feature": "dining",
+          "sentiment_distribution": {
+            "positive": 1.0
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 1.0,
+          "review_count": 3
+        },
+        {
+          "window_index": 0,
+          "window_start": 0,
+          "window_end": 10,
+          "feature": "value",
+          "sentiment_distribution": {
+            "positive": 0.5,
+            "neutral": 0.5
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.5,
+          "review_count": 2
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "cleanliness",
+          "sentiment_distribution": {
+            "positive": 0.8,
+            "neutral": 0.2
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.8,
+          "review_count": 5
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "service",
+          "sentiment_distribution": {
+            "positive": 0.714,
+            "neutral": 0.143,
+            "negative": 0.143
+          },
+          "complaint_rate": 0.143,
+          "praise_rate": 0.714,
+          "review_count": 7
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "location",
+          "sentiment_distribution": {
+            "positive": 0.5,
+            "neutral": 0.25,
+            "negative": 0.25
+          },
+          "complaint_rate": 0.25,
+          "praise_rate": 0.5,
+          "review_count": 4
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "dining",
+          "sentiment_distribution": {
+            "positive": 1.0
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 1.0,
+          "review_count": 3
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "value",
+          "sentiment_distribution": {
+            "positive": 0.5,
+            "neutral": 0.5
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.5,
+          "review_count": 2
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "room",
+          "sentiment_distribution": {
+            "neutral": 0.75,
+            "negative": 0.25
+          },
+          "complaint_rate": 0.25,
+          "praise_rate": 0.0,
+          "review_count": 4
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "noise",
+          "sentiment_distribution": {
+            "positive": 0.667,
+            "neutral": 0.333
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.667,
+          "review_count": 3
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "lobby",
+          "sentiment_distribution": {
+            "neutral": 1.0
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.0,
+          "review_count": 2
+        },
+        {
+          "window_index": 1,
+          "window_start": 5,
+          "window_end": 15,
+          "feature": "check_in",
+          "sentiment_distribution": {
+            "neutral": 0.5,
+            "negative": 0.5
+          },
+          "complaint_rate": 0.5,
+          "praise_rate": 0.0,
+          "review_count": 2
+        },
+        {
+          "window_index": 2,
+          "window_start": 10,
+          "window_end": 20,
+          "feature": "room",
+          "sentiment_distribution": {
+            "neutral": 0.667,
+            "negative": 0.333
+          },
+          "complaint_rate": 0.333,
+          "praise_rate": 0.0,
+          "review_count": 6
+        },
+        {
+          "window_index": 2,
+          "window_start": 10,
+          "window_end": 20,
+          "feature": "cleanliness",
+          "sentiment_distribution": {
+            "neutral": 0.6,
+            "positive": 0.2,
+            "negative": 0.2
+          },
+          "complaint_rate": 0.2,
+          "praise_rate": 0.2,
+          "review_count": 5
+        },
+        {
+          "window_index": 2,
+          "window_start": 10,
+          "window_end": 20,
+          "feature": "service",
+          "sentiment_distribution": {
+            "neutral": 0.25,
+            "negative": 0.25,
+            "positive": 0.5
+          },
+          "complaint_rate": 0.25,
+          "praise_rate": 0.5,
+          "review_count": 4
+        },
+        {
+          "window_index": 2,
+          "window_start": 10,
+          "window_end": 20,
+          "feature": "location",
+          "sentiment_distribution": {
+            "neutral": 0.5,
+            "negative": 0.25,
+            "positive": 0.25
+          },
+          "complaint_rate": 0.25,
+          "praise_rate": 0.25,
+          "review_count": 4
+        },
+        {
+          "window_index": 2,
+          "window_start": 10,
+          "window_end": 20,
+          "feature": "noise",
+          "sentiment_distribution": {
+            "neutral": 0.667,
+            "positive": 0.333
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.333,
+          "review_count": 3
+        },
+        {
+          "window_index": 2,
+          "window_start": 10,
+          "window_end": 20,
+          "feature": "parking",
+          "sentiment_distribution": {
+            "neutral": 1.0
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.0,
+          "review_count": 2
+        },
+        {
+          "window_index": 2,
+          "window_start": 10,
+          "window_end": 20,
+          "feature": "check_in",
+          "sentiment_distribution": {
+            "neutral": 0.5,
+            "negative": 0.5
+          },
+          "complaint_rate": 0.5,
+          "praise_rate": 0.0,
+          "review_count": 2
+        },
+        {
+          "window_index": 2,
+          "window_start": 10,
+          "window_end": 20,
+          "feature": "amenities",
+          "sentiment_distribution": {
+            "neutral": 1.0
+          },
+          "complaint_rate": 0.0,
+          "praise_rate": 0.0,
+          "review_count": 2
+        }
+      ],
+      "recommendations": [
+        {
+          "priority": 2,
+          "category": "operations",
+          "title": "Address Check In Complaints",
+          "description": "33% of guest reviews mention negative check in experience",
+          "supporting_data": "1 complaints out of 3 mentions",
+          "suggested_action": "Investigate root cause of check in issues; consider staffing/maintenance review",
+          "estimated_impact": "Expected improvement in guest satisfaction scores and NPS",
+          "affected_feature": "check_in",
+          "triggered_by": "analysis"
+        },
+        {
+          "priority": 2,
+          "category": "quality",
+          "title": "Investigate Cleanliness Trend",
+          "description": "Emerging complaint detected for 'cleanliness': complaint rate increased from 0% to 20% (+2000%) in latest batch. Affecting 1 reviews.",
+          "supporting_data": "Rate: 20%, Change: +2000%",
+          "suggested_action": "Immediate operational review and guest recovery protocol",
+          "estimated_impact": "Prevent NPS decline and negative review accumulation",
+          "affected_feature": "cleanliness",
+          "triggered_by": "analysis"
+        },
+        {
+          "priority": 2,
+          "category": "quality",
+          "title": "Investigate Service Trend",
+          "description": "Emerging complaint detected for 'service': complaint rate increased from 14% to 25% (+75%) in latest batch. Affecting 1 reviews.",
+          "supporting_data": "Rate: 25%, Change: +75%",
+          "suggested_action": "Immediate operational review and guest recovery protocol",
+          "estimated_impact": "Prevent NPS decline and negative review accumulation",
+          "affected_feature": "service",
+          "triggered_by": "analysis"
+        }
+      ],
+      "processed_reviews": [
+        {
+          "id": "f7e1bea8",
+          "original_text": "The staff here were very friendly, professional, and courteous, which made for a welcoming check-in. The room itself was an adequate size and the beds were somewhat comfortable for the stay.\n\nHowever, the bathroom really needs the most attention. There is no vanity storage space, there was visible mold in the caulk line, and the tub stopper was completely broken. Worst of all, the shower pressure was absolutely abysmal it felt like a weak drizzle of rain rather than an actual shower. Great service from the team, but the bathroom maintenance needs a major upgrade.",
+          "cleaned_text": "The staff here were very friendly, professional, and courteous, which made for a welcoming check-in. The room itself was an adequate size and the beds were somewhat comfortable for the stay. However, the bathroom really needs the most attention. There is no vanity storage space, there was visible mold in the caulk line, and the tub stopper was completely broken. Worst of all, the shower pressure was absolutely abysmal it felt like a weak drizzle of rain rather than an actual shower. Great service from the team, but the bathroom maintenance needs a major upgrade.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "cleanliness",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "service",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "bathroom",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "check_in",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "amenities",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 3.3,
+          "sub_ratings": {
+            "cleanliness": 4.0,
+            "location": 4.0,
+            "amenities": 2.0,
+            "dining": 2.0,
+            "service": 5.0,
+            "value": 3.0
+          },
+          "review_date": "2026-05-19T22:52:45.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:22.988778"
+        },
+        {
+          "id": "1440f80b",
+          "original_text": "The fact that customers could not control room temperature made our stay a little uncomfortable. We had to sleep in layers. When we asked if our room temperature was malfunctioning we were told they controlled it and could only be changed if they received enough complaints.",
+          "cleaned_text": "The fact that customers could not control room temperature made our stay a little uncomfortable. We had to sleep in layers. When we asked if our room temperature was malfunctioning we were told they controlled it and could only be changed if they received enough complaints.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 2.7,
+          "sub_ratings": {
+            "location": 4.0,
+            "service": 3.0,
+            "value": 1.0
+          },
+          "review_date": "2026-05-12T18:27:42.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:22.994033"
+        },
+        {
+          "id": "f95ed3ea",
+          "original_text": "See the title there were roaches, the staff was helpful and kind. But there are roaches.",
+          "cleaned_text": "See the title there were roaches, the staff was helpful and kind. But there are roaches.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "service",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 2.4,
+          "sub_ratings": {
+            "cleanliness": 1.0,
+            "location": 4.0,
+            "amenities": 3.0,
+            "service": 3.0,
+            "value": 1.0
+          },
+          "review_date": "2026-05-08T18:29:40.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:22.995151"
+        },
+        {
+          "id": "1532f059",
+          "original_text": "I spend one night at this hotel for my birthday.  I would like to go here again",
+          "cleaned_text": "I spend one night at this hotel for my birthday. I would like to go here again",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "positive",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 5.0,
+          "sub_ratings": {
+            "cleanliness": 5.0,
+            "location": 5.0,
+            "amenities": 5.0,
+            "dining": 5.0,
+            "service": 5.0,
+            "value": 5.0
+          },
+          "review_date": "2026-05-05T18:25:19.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:22.996629"
+        },
+        {
+          "id": "a0bf0310",
+          "original_text": "Courtyard by Marriott is an amazing hotel. Pleasant staff, beautiful clean rooms and great service is the recipe for a wonderful stay.  I love staying at the Marriott. Join the team. Book your next stay at Courtyard by Marriott. \n\nMaureen",
+          "cleaned_text": "Courtyard by Marriott is an amazing hotel. Pleasant staff, beautiful clean rooms and great service is the recipe for a wonderful stay. I love staying at the Marriott. Join the team. Book your next stay at Courtyard by Marriott. Maureen",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "positive",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "cleanliness",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "service",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 5.0,
+          "sub_ratings": {
+            "cleanliness": 5.0,
+            "location": 5.0,
+            "amenities": 5.0,
+            "dining": 5.0,
+            "service": 5.0,
+            "value": 5.0
+          },
+          "review_date": "2026-05-03T16:13:45.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:22.998082"
+        },
+        {
+          "id": "9ce00435",
+          "original_text": "This hotel is located in a safe area of Mid-town and walking distance to many NYC restaurants and sites.  The staff is friendly and the hotel has a small, intimate feeling when you stay.  We have stayed here twice and will book again in the future.  Housekeeping and concierge staff are fantastic!  Special Thank you to Evelyn, Nancy and Pedro!",
+          "cleaned_text": "This hotel is located in a safe area of Mid-town and walking distance to many NYC restaurants and sites. The staff is friendly and the hotel has a small, intimate feeling when you stay. We have stayed here twice and will book again in the future. Housekeeping and concierge staff are fantastic! Special Thank you to Evelyn, Nancy and Pedro!",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "positive",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "cleanliness",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "service",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "location",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "dining",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 4.7,
+          "sub_ratings": {
+            "cleanliness": 5.0,
+            "location": 5.0,
+            "amenities": 4.0,
+            "dining": 4.0,
+            "service": 5.0,
+            "value": 5.0
+          },
+          "review_date": "2026-04-29T10:32:51.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:22.999637"
+        },
+        {
+          "id": "de42c8eb",
+          "original_text": "I highly recommend this hotel for your next stay in New York City.  The hotel is conveniently located to many city attractions, as well as excellent restaurants and shopping.  The part is located across the street from Bryant Park and the New York City Public Library.  It is not very far from Central Park and many other attractions.  The area is very clean and we felt very comfortable there.  The hotel is clean and the staff is very helpful and friendly.  My family and I feel that it provided us great value for the price that we paid.",
+          "cleaned_text": "I highly recommend this hotel for your next stay in New York City. The hotel is conveniently located to many city attractions, as well as excellent restaurants and shopping. The part is located across the street from Bryant Park and the New York City Public Library. It is not very far from Central Park and many other attractions. The area is very clean and we felt very comfortable there. The hotel is clean and the staff is very helpful and friendly. My family and I feel that it provided us great value for the price that we paid.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "positive",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "cleanliness",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "service",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "location",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "dining",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "value",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 5.0,
+          "sub_ratings": {
+            "cleanliness": 5.0,
+            "location": 5.0,
+            "amenities": 5.0,
+            "dining": 5.0,
+            "service": 5.0,
+            "value": 5.0
+          },
+          "review_date": "2026-04-27T19:34:45.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.001464"
+        },
+        {
+          "id": "c07058d4",
+          "original_text": "Everything with the stay went fine, except we were thinking we'd get a room with queen beds as advertised.",
+          "cleaned_text": "Everything with the stay went fine, except we were thinking we'd get a room with queen beds as advertised.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 2.8,
+          "sub_ratings": {
+            "cleanliness": 3.0,
+            "location": 3.0,
+            "amenities": 3.0,
+            "dining": 2.0,
+            "service": 3.0,
+            "value": 3.0
+          },
+          "review_date": "2026-04-18T19:58:44.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.003276"
+        },
+        {
+          "id": "e484aa49",
+          "original_text": "So clean, so friendly! Loved the 24 hour coffee and water. And it was so quiet",
+          "cleaned_text": "So clean, so friendly! Loved the 24 hour coffee and water. And it was so quiet",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "positive",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "cleanliness",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "service",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "dining",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "noise",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 5.0,
+          "sub_ratings": {
+            "cleanliness": 5.0,
+            "location": 5.0,
+            "amenities": 5.0,
+            "service": 5.0,
+            "value": 5.0
+          },
+          "review_date": "2026-04-15T13:32:10.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.004539"
+        },
+        {
+          "id": "2f3193be",
+          "original_text": "If you're looking for small overpriced rooms that scream 1987 this is your place. Carpet in room made me keep a walk around pair of socks next to my bed just to use restroom or walk around. The decor looked like it was hand-me-downs. Bathroom and toilet were even more outdated than the rest of the room. The toilet had that 80's yellowish color to it. Bed sheets look like they came balled up out of a plastic bag. Wall paper on walls looked like it was hanging on for dear life.",
+          "cleaned_text": "If you're looking for small overpriced rooms that scream 1987 this is your place. Carpet in room made me keep a walk around pair of socks next to my bed just to use restroom or walk around. The decor looked like it was hand-me-downs. Bathroom and toilet were even more outdated than the rest of the room. The toilet had that 80's yellowish color to it. Bed sheets look like they came balled up out of a plastic bag. Wall paper on walls looked like it was hanging on for dear life.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "bathroom",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "value",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "lobby",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 2.5,
+          "sub_ratings": {
+            "cleanliness": 1.0,
+            "location": 5.0,
+            "amenities": 2.0,
+            "dining": 3.0,
+            "service": 3.0,
+            "value": 1.0
+          },
+          "review_date": "2026-04-14T19:45:53.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.006700"
+        },
+        {
+          "id": "931bbc46",
+          "original_text": "I was nervous about driving into the City for this stay, but getting to the hotel, and even parking around the corner, was relatively easy. It's also an easy walk from Grand Central. We loved being close to the library and Bryant Park. The hotel was pleasantly quiet considering how close it is to everything. Our room was simple and clean. Two fast elevators and an efficient front desk kept the lobby from being crowded. Hotel staff were incredibly helpful - very kind and patient. It was amazing to be able to leave our bags there securely until later in the day after we checked out.",
+          "cleaned_text": "I was nervous about driving into the City for this stay, but getting to the hotel, and even parking around the corner, was relatively easy. It's also an easy walk from Grand Central. We loved being close to the library and Bryant Park. The hotel was pleasantly quiet considering how close it is to everything. Our room was simple and clean. Two fast elevators and an efficient front desk kept the lobby from being crowded. Hotel staff were incredibly helpful - very kind and patient. It was amazing to be able to leave our bags there securely until later in the day after we checked out.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "cleanliness",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "service",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "location",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "noise",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "parking",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "check_in",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "lobby",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 3.7,
+          "sub_ratings": {
+            "cleanliness": 4.0,
+            "location": 5.0,
+            "amenities": 3.0,
+            "dining": 2.0,
+            "service": 5.0,
+            "value": 3.0
+          },
+          "review_date": "2026-04-13T14:29:41.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.008654"
+        },
+        {
+          "id": "99e714f3",
+          "original_text": "I took a red eye from California and requested for eqlry checkin so i could be at my business meetings ready and in time. Hotel faculty didn't honor the request and didnt bother to ask about how they can help solve for the needs. They said they will call as soon as a room would be available but never called. I ahd yo show up to ask for a room again. Disrupted my entire day and made it invain to lodge in downtown closer to my meeting venue.",
+          "cleaned_text": "I took a red eye from California and requested for eqlry checkin so i could be at my business meetings ready and in time. Hotel faculty didn't honor the request and didnt bother to ask about how they can help solve for the needs. They said they will call as soon as a room would be available but never called. I ahd yo show up to ask for a room again. Disrupted my entire day and made it invain to lodge in downtown closer to my meeting venue.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "negative",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "negative",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "location",
+              "sentiment": "negative",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "check_in",
+              "sentiment": "negative",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 1.8,
+          "sub_ratings": {
+            "cleanliness": 2.0,
+            "location": 3.0,
+            "amenities": 2.0,
+            "dining": 2.0,
+            "service": 1.0,
+            "value": 1.0
+          },
+          "review_date": "2026-04-12T20:04:48.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.010548"
+        },
+        {
+          "id": "2bba6222",
+          "original_text": "This hotel is a huge step below any Marriott property I\u2019ve stayed in across the US, Europe, Canada, Mexico, etc. Courtyard has always been my safe go-to for business travel, but there is no way I could ever stay here again. Super rude and unhelpful staff - like going out of their way to be rude to my employees who were asking normal hotel/travel related questions. Overall a baffling experience. Why do you work in hospitality if you hate people?",
+          "cleaned_text": "This hotel is a huge step below any Marriott property I ve stayed in across the US, Europe, Canada, Mexico, etc. Courtyard has always been my safe go-to for business travel, but there is no way I could ever stay here again. Super rude and unhelpful staff - like going out of their way to be rude to my employees who were asking normal hotel travel related questions. Overall a baffling experience. Why do you work in hospitality if you hate people?",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "negative",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "service",
+              "sentiment": "negative",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 1.2,
+          "sub_ratings": {
+            "cleanliness": 1.0,
+            "location": 2.0,
+            "amenities": 1.0,
+            "dining": 1.0,
+            "service": 1.0,
+            "value": 1.0
+          },
+          "review_date": "2026-04-12T19:57:50.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.012737"
+        },
+        {
+          "id": "0e29322c",
+          "original_text": "Very quiet, very clean, staff was very attentive when I had a need!!",
+          "cleaned_text": "Very quiet, very clean, staff was very attentive when I had a need!",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "positive",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "cleanliness",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "service",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "noise",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 4.3,
+          "sub_ratings": {
+            "cleanliness": 5.0,
+            "location": 5.0,
+            "amenities": 4.0,
+            "dining": 4.0,
+            "service": 5.0,
+            "value": 3.0
+          },
+          "review_date": "2026-04-12T17:36:14.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.014099"
+        },
+        {
+          "id": "b0ab2246",
+          "original_text": "Staff could have been friendlier",
+          "cleaned_text": "Staff could have been friendlier",
+          "language": "en",
+          "detected_languages": [
+            "da",
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "positive",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "service",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 4.5,
+          "sub_ratings": {
+            "cleanliness": 5.0,
+            "location": 5.0,
+            "amenities": 5.0,
+            "dining": 5.0,
+            "service": 4.0,
+            "value": 3.0
+          },
+          "review_date": "2026-04-11T17:56:42.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [
+            "multilingual"
+          ],
+          "processed_at": "2026-05-21T11:35:23.018237"
+        },
+        {
+          "id": "58098834",
+          "original_text": "The room was not very clean, and it was extremely hot. I reported the issue, but was told that since it\u2019s April, the hotel is still running the heater. There was no real attempt to fix the problem, even though I was traveling with my kids.\nVery disappointing experience. I would not stay there again and would not recommend this hotel. It felt like they didn\u2019t care about their guests.",
+          "cleaned_text": "The room was not very clean, and it was extremely hot. I reported the issue, but was told that since it s April, the hotel is still running the heater. There was no real attempt to fix the problem, even though I was traveling with my kids. Very disappointing experience. I would not stay there again and would not recommend this hotel. It felt like they didn t care about their guests.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "negative",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "negative",
+              "confidence": 0.55,
+              "excerpts": []
+            },
+            {
+              "feature": "cleanliness",
+              "sentiment": "negative",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 1.8,
+          "sub_ratings": {
+            "cleanliness": 1.0,
+            "location": 4.0,
+            "amenities": 1.0,
+            "dining": 3.0,
+            "service": 1.0,
+            "value": 1.0
+          },
+          "review_date": "2026-04-11T11:21:26.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.019952"
+        },
+        {
+          "id": "d9adb15f",
+          "original_text": "My 15 year old son and I spent a few days in Manhattan for spring break. This hotel worked out well for us: we each had our own bed, we had a nice view of the city skyline, we were close to food and Bryant Park, and it was pretty clean. I like that the TV had a menu where you could sign into Netflix or HBO, etc. \nThere was a lot of construction noise on the street below, which is not the hotel's fault. We slept fine, despite the noise. The beds were firm.",
+          "cleaned_text": "My 15 year old son and I spent a few days in Manhattan for spring break. This hotel worked out well for us: we each had our own bed, we had a nice view of the city skyline, we were close to food and Bryant Park, and it was pretty clean. I like that the TV had a menu where you could sign into Netflix or HBO, etc. There was a lot of construction noise on the street below, which is not the hotel's fault. We slept fine, despite the noise. The beds were firm.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "cleanliness",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "dining",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "noise",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "parking",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 3.4,
+          "sub_ratings": {
+            "cleanliness": 3.0,
+            "location": 4.0,
+            "amenities": 3.0,
+            "service": 4.0,
+            "value": 3.0
+          },
+          "review_date": "2026-04-06T15:29:11.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.022009"
+        },
+        {
+          "id": "1e4e3c4f",
+          "original_text": "Overall, location was fine and close to meetings I needed to attend in the area. Room was dated and carpet was really dirty and just made the space feel dirty.",
+          "cleaned_text": "Overall, location was fine and close to meetings I needed to attend in the area. Room was dated and carpet was really dirty and just made the space feel dirty.",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "cleanliness",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "location",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "amenities",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 2.3,
+          "sub_ratings": {
+            "cleanliness": 1.0,
+            "location": 4.0,
+            "amenities": 2.0,
+            "dining": 3.0,
+            "service": 3.0,
+            "value": 1.0
+          },
+          "review_date": "2026-04-01T16:23:13.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.023301"
+        },
+        {
+          "id": "09a83b78",
+          "original_text": "Spent the night in NYC to attend Masquerade and get in a few touristy things\u2026.  Was able to arrange car service to the airport, in a GREAT location for tourist attractions, and genuinely welcomed by everyone at the Marriott New Yort Manhattan/Fifth Avenue!",
+          "cleaned_text": "Spent the night in NYC to attend Masquerade and get in a few touristy things . Was able to arrange car service to the airport, in a GREAT location for tourist attractions, and genuinely welcomed by everyone at the Marriott New Yort Manhattan Fifth Avenue!",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "positive",
+          "overall_confidence": 0.55,
+          "feature_sentiments": [
+            {
+              "feature": "location",
+              "sentiment": "positive",
+              "confidence": 0.55,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 5.0,
+          "sub_ratings": {
+            "cleanliness": 5.0,
+            "location": 5.0,
+            "amenities": 5.0,
+            "dining": 5.0,
+            "service": 5.0,
+            "value": 5.0
+          },
+          "review_date": "2026-04-01T09:03:13.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.024725"
+        },
+        {
+          "id": "ad1e94a8",
+          "original_text": "Very outdated hotel, small rooms and requires major remodeling. The gym can only fit 3 people! Unreal",
+          "cleaned_text": "Very outdated hotel, small rooms and requires major remodeling. The gym can only fit 3 people! Unreal",
+          "language": "en",
+          "detected_languages": [
+            "en"
+          ],
+          "status": "clean",
+          "duplicate_of": null,
+          "overall_sentiment": "neutral",
+          "overall_confidence": 0.45,
+          "feature_sentiments": [
+            {
+              "feature": "room",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            },
+            {
+              "feature": "amenities",
+              "sentiment": "neutral",
+              "confidence": 0.45,
+              "excerpts": []
+            }
+          ],
+          "product_category": "Courtyard New York Manhattan/Fifth Avenue",
+          "product_name": "Courtyard New York Manhattan/Fifth Avenue",
+          "rating": 3.0,
+          "sub_ratings": {
+            "cleanliness": 3.0,
+            "location": 5.0,
+            "amenities": 1.0,
+            "service": 4.0,
+            "value": 2.0
+          },
+          "review_date": "2026-03-29T01:21:55.000+00:00",
+          "helpful_votes": 0,
+          "verified_purchase": true,
+          "bot_score": 0.0,
+          "bot_risk_level": "low",
+          "bot_signals": [],
+          "emoji_signals": [],
+          "emoji_count": 0,
+          "flags": [],
+          "processed_at": "2026-05-21T11:35:23.026170"
+        }
+      ],
+      "processing_time_seconds": 16.65,
+      "agent_trace": [
+        {
+          "agent": "PreprocessingAgent",
+          "output": "complete",
+          "count": 20
+        },
+        {
+          "agent": "EmojiAgent",
+          "output": "complete",
+          "emojis": 0,
+          "reviews_with_emojis": 0
+        },
+        {
+          "agent": "OrchestratorAgent (Pre)",
+          "output": "complete",
+          "decisions": 0
+        },
+        {
+          "agent": "DeduplicationAgent",
+          "output": "complete",
+          "duplicates": 0,
+          "bots": 0
+        },
+        {
+          "agent": "OrchestratorAgent (Post-Dedup)",
+          "output": "complete",
+          "route": "proceed_to_sentiment"
+        },
+        {
+          "agent": "SentimentAgent",
+          "output": "complete",
+          "low_confidence": 0
+        },
+        {
+          "agent": "OrchestratorAgent (Post-Sentiment)",
+          "output": "complete",
+          "avg_confidence": 0.505
+        },
+        {
+          "agent": "TrendAgent",
+          "output": "complete",
+          "alerts": 2
+        },
+        {
+          "agent": "OrchestratorAgent (Post-Trend)",
+          "output": "complete"
+        },
+        {
+          "agent": "RecommendationAgent",
+          "output": "complete",
+          "recommendations": 3
+        },
+        {
+          "agent": "CrossComparisonAgent",
+          "output": "unknown",
+          "categories": 0
+        },
+        {
+          "agent": "ReportAgent",
+          "output": "complete"
+        }
+      ],
+      "orchestrator_decisions": [
+        {
+          "decision_id": "613ac8f5",
+          "phase": "post_sentiment",
+          "decision": "confidence_acceptable",
+          "reason": "Average confidence 0.51 meets threshold 0.45",
+          "action": "route",
+          "affected_agents": [
+            "TrendAgent",
+            "RecommendationAgent"
+          ],
+          "metadata": {
+            "avg_confidence": 0.505
+          },
+          "timestamp": "2026-05-21T11:35:27.806449"
+        }
+      ],
+      "emoji_analysis": {
+        "total_emojis_found": 0,
+        "unique_emojis": 0,
+        "emoji_frequency": {},
+        "emoji_sentiment_map": {},
+        "top_positive_emojis": [],
+        "top_negative_emojis": [],
+        "reviews_with_emojis": 0,
+        "emoji_confidence_boosts_applied": 0,
+        "emoji_sentiment_distribution": {}
+      },
+      "cross_product_comparison": null,
+      "feedback_loops_triggered": 0,
+      "pipeline_version": "2.0-agentic"
+    },
+    "cached_at": "2026-05-21T17:05:39Z",
+    "review_count": 20,
+    "hotel_name": "Courtyard New York Manhattan/Fifth Avenue"
+  }
+}

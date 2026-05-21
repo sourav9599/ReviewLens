@@ -31,13 +31,13 @@ Enterprise KPI Alignment:
 
 Pipeline Position: Runs AFTER mentions_extraction → feeds Hotel Export.
 """
+import time
 import logging
 from typing import List, Dict
 
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-
 from core.config import settings
 from core.models import ReviewPipelineState, ReviewStatus
+from core.llm_factory import get_embeddings
 
 logger = logging.getLogger(__name__)
 
@@ -59,10 +59,7 @@ def embedding_generation_agent(state: ReviewPipelineState) -> ReviewPipelineStat
 
     logger.info(f"[EmbeddingAgent] Generating embeddings for {len(analyzable)} reviews")
 
-    embeddings_model = GoogleGenerativeAIEmbeddings(
-        model="models/gemini-embedding-2",
-        google_api_key=settings.GOOGLE_API_KEY,
-    )
+    embeddings_model = get_embeddings()
 
     embedding_map: Dict[str, List[float]] = state["pipeline_config"].get("_embedding_map", {})
 
@@ -79,6 +76,8 @@ def embedding_generation_agent(state: ReviewPipelineState) -> ReviewPipelineStat
         except Exception as e:
             logger.warning(f"[EmbeddingAgent] Batch {i//BATCH_SIZE} failed: {e}")
             errors.append(f"Embedding batch error: {str(e)}")
+
+        time.sleep(1)
 
     state["pipeline_config"]["_embedding_map"] = embedding_map
     state["errors"] = errors

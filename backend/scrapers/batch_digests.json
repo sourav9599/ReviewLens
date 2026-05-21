@@ -1,0 +1,105 @@
+[
+  {
+    "digest_id": "batch_7392b0e6",
+    "hotel_id": "NYCES",
+    "hotel_name": "Courtyard New York Manhattan/Fifth Avenue",
+    "created_at": "2026-05-21T09:22:25.781873",
+    "review_count": 20,
+    "sentiment_distribution": {
+      "neutral": 1.0
+    },
+    "avg_rating": null,
+    "sub_ratings_avg": {
+      "cleanliness": 3.37,
+      "location": 4.35,
+      "amenities": 3.21,
+      "dining": 3.4,
+      "service": 3.75,
+      "value": 2.85
+    },
+    "top_mentions": [
+      {
+        "mention": "friendly staff",
+        "count": 3
+      },
+      {
+        "mention": "clean hotel",
+        "count": 3
+      },
+      {
+        "mention": "quiet hotel",
+        "count": 3
+      },
+      {
+        "mention": "small rooms",
+        "count": 2
+      },
+      {
+        "mention": "mediocre bathroom",
+        "count": 1
+      },
+      {
+        "mention": "adequate room size",
+        "count": 1
+      },
+      {
+        "mention": "sleeping in layers",
+        "count": 1
+      },
+      {
+        "mention": "uncomfortable stay",
+        "count": 1
+      },
+      {
+        "mention": "room temperature control",
+        "count": 1
+      },
+      {
+        "mention": "roaches",
+        "count": 1
+      },
+      {
+        "mention": "helpful staff",
+        "count": 1
+      },
+      {
+        "mention": "birthday stay",
+        "count": 1
+      },
+      {
+        "mention": "would return",
+        "count": 1
+      },
+      {
+        "mention": "great service",
+        "count": 1
+      },
+      {
+        "mention": "clean rooms",
+        "count": 1
+      }
+    ],
+    "top_complaints": [],
+    "top_praises": [],
+    "category_sentiments": {
+      "room": "neutral",
+      "cleanliness": "neutral",
+      "service": "neutral",
+      "bathroom": "neutral",
+      "check_in": "neutral",
+      "amenities": "neutral",
+      "location": "neutral",
+      "dining": "neutral",
+      "value": "neutral",
+      "noise": "neutral",
+      "lobby": "neutral",
+      "parking": "neutral"
+    },
+    "sample_positive_excerpts": [],
+    "sample_negative_excerpts": [],
+    "date_range": {
+      "earliest": "2026-03-29",
+      "latest": "2026-05-19"
+    }
+  }
+]

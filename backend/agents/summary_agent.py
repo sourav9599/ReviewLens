@@ -34,16 +34,17 @@ Pipeline Position: Runs AFTER hotel_json_export → END.
 import json
 import os
 import uuid
+import time
 import logging
 from typing import List, Dict, Any
 from collections import Counter
 from datetime import datetime
 
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage
 
 from core.config import settings
 from core.models import ReviewPipelineState, ReviewStatus, SentimentLabel
+from core.llm_factory import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -332,12 +333,7 @@ def aggregate_hotel_summary(hotel_id: str, force_refresh: bool = False) -> Dict[
     digests_text = json.dumps(digests_for_prompt, indent=2)
 
     try:
-        llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GOOGLE_API_KEY,
-            temperature=0.3,
-            max_output_tokens=1024,
-        )
+        llm = get_llm(temperature=0.3, max_tokens=1024)
 
         prompt = REDUCE_PROMPT.format(
             hotel_name=hotel_name,
@@ -349,6 +345,8 @@ def aggregate_hotel_summary(hotel_id: str, force_refresh: bool = False) -> Dict[
         content = response.content.strip()
         content = content.lstrip("```json").lstrip("```").rstrip("```").strip()
         summary_data = json.loads(content)
+
+        time.sleep(1)
 
     except Exception as e:
         logger.error(f"[SummaryAgent] LLM aggregation failed: {e}")

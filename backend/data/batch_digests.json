@@ -1,0 +1,252 @@
+[
+  {
+    "digest_id": "batch_fb2ee622",
+    "hotel_id": "NYCES",
+    "hotel_name": "Courtyard New York Manhattan/Fifth Avenue",
+    "created_at": "2026-05-21T12:24:23.988574",
+    "review_count": 100,
+    "sentiment_distribution": {
+      "neutral": 0.75,
+      "positive": 0.12,
+      "negative": 0.13
+    },
+    "avg_rating": null,
+    "sub_ratings_avg": {
+      "cleanliness": 3.7,
+      "location": 4.43,
+      "amenities": 2.98,
+      "dining": 2.86,
+      "service": 3.6,
+      "value": 2.97
+    },
+    "top_mentions": [
+      {
+        "mention": "great location",
+        "count": 10
+      },
+      {
+        "mention": "friendly staff",
+        "count": 9
+      },
+      {
+        "mention": "helpful staff",
+        "count": 9
+      },
+      {
+        "mention": "clean rooms",
+        "count": 8
+      },
+      {
+        "mention": "clean hotel",
+        "count": 6
+      },
+      {
+        "mention": "small rooms",
+        "count": 6
+      },
+      {
+        "mention": "great staff",
+        "count": 5
+      },
+      {
+        "mention": "broken elevator",
+        "count": 5
+      },
+      {
+        "mention": "excellent location",
+        "count": 4
+      },
+      {
+        "mention": "walking distance",
+        "count": 4
+      },
+      {
+        "mention": "quiet hotel",
+        "count": 3
+      },
+      {
+        "mention": "safe neighborhood",
+        "count": 3
+      },
+      {
+        "mention": "perfect location",
+        "count": 3
+      },
+      {
+        "mention": "times square",
+        "count": 3
+      },
+      {
+        "mention": "nice staff",
+        "count": 3
+      }
+    ],
+    "top_complaints": [
+      "one working elevator",
+      "great value location",
+      "ac not working",
+      "rude staff",
+      "not family friendly"
+    ],
+    "top_praises": [
+      "friendly staff",
+      "safe neighborhood",
+      "comfortable stay",
+      "bryant park",
+      "grand central proximity"
+    ],
+    "category_sentiments": {
+      "room": "neutral",
+      "cleanliness": "neutral",
+      "service": "neutral",
+      "bathroom": "neutral",
+      "check_in": "neutral",
+      "amenities": "neutral",
+      "location": "neutral",
+      "dining": "neutral",
+      "value": "neutral",
+      "noise": "neutral",
+      "lobby": "neutral",
+      "parking": "neutral"
+    },
+    "sample_positive_excerpts": [
+      "Great spot close to NY public library and Bryant park. Great location with easy access to Bryant park, the NY public lib",
+      "ideal location. close to Grand Central - convenient and safe after a late night.",
+      "Family stay. Good for families and close to all main attractions. Will recommend it. No fridge on the room."
+    ],
+    "sample_negative_excerpts": [
+      "Decent price for amenities location, issue with support from staff. Location was great value, close to major landmarks a",
+      "Do NOT stay here.. Terrible accommodations. Rude staff. Definitely not family friendly. Hotel has nothing to offer.",
+      "Very Poor Experience. Hotel was extremely dated, not even an offer of bottled water for a Titanium member, was told to g"
+    ],
+    "date_range": {
+      "earliest": "2025-08-29",
+      "latest": "2026-05-19"
+    }
+  },
+  {
+    "digest_id": "batch_9fed38e6",
+    "hotel_id": "NYCES",
+    "hotel_name": "Courtyard New York Manhattan/Fifth Avenue",
+    "created_at": "2026-05-21T12:25:31.244335",
+    "review_count": 100,
+    "sentiment_distribution": {
+      "neutral": 0.45,
+      "negative": 0.36,
+      "positive": 0.19
+    },
+    "avg_rating": null,
+    "sub_ratings_avg": {
+      "cleanliness": 3.83,
+      "location": 4.61,
+      "amenities": 3.04,
+      "service": 3.66,
+      "value": 3.1,
+      "dining": 2.81
+    },
+    "top_mentions": [
+      {
+        "mention": "broken elevator",
+        "count": 12
+      },
+      {
+        "mention": "great location",
+        "count": 8
+      },
+      {
+        "mention": "excellent location",
+        "count": 7
+      },
+      {
+        "mention": "friendly staff",
+        "count": 7
+      },
+      {
+        "mention": "long wait times",
+        "count": 6
+      },
+      {
+        "mention": "perfect location",
+        "count": 5
+      },
+      {
+        "mention": "good location",
+        "count": 5
+      },
+      {
+        "mention": "general negative",
+        "count": 4
+      },
+      {
+        "mention": "clean rooms",
+        "count": 4
+      },
+      {
+        "mention": "clean room",
+        "count": 4
+      },
+      {
+        "mention": "grand central station",
+        "count": 4
+      },
+      {
+        "mention": "accommodating staff",
+        "count": 4
+      },
+      {
+        "mention": "excellent staff",
+        "count": 3
+      },
+      {
+        "mention": "bryant park",
+        "count": 3
+      },
+      {
+        "mention": "noisy room",
+        "count": 3
+      }
+    ],
+    "top_complaints": [
+      "long wait times",
+      "broken elevator",
+      "general negative",
+      "great location",
+      "broken elevators"
+    ],
+    "top_praises": [
+      "accommodating staff",
+      "central location",
+      "excellent location",
+      "wheelchair accessibility",
+      "quiet rooms"
+    ],
+    "category_sentiments": {
+      "room": "neutral",
+      "cleanliness": "neutral",
+      "service": "neutral",
+      "location": "neutral",
+      "lobby": "negative",
+      "bathroom": "neutral",
+      "dining": "neutral",
+      "amenities": "neutral",
+      "value": "neutral",
+      "noise": "negative",
+      "check_in": "neutral",
+      "parking": "neutral"
+    },
+    "sample_positive_excerpts": [
+      "Great place to stay!. Rooms were quiet and pretty. Was a little tight with a wheelchair, but typical for New York.",
+      "Great central location. Excellent, friendly staff. We stayed at three Marriott locations in NYC on this trip. This Court",
+      "girls trip to New York. Hotel has perfect, midtown location, excellent coffee machine in the lobby all staff on site, co"
+    ],
+    "sample_negative_excerpts": [
+      "I ve been to better Marriott's. I ve been to better Marriott",
+      "Not good. Only good thing about this hotel was that it was in a reasonable location. Dirty and dingy",
+      "New York Queen beds. The staff was extremely rude when we asked about our bed size being a double and not a queen. They "
+    ],
+    "date_range": {
+      "earliest": "2024-12-27",
+      "latest": "2025-08-24"
+    }
+  }
+]

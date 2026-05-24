@@ -10,11 +10,12 @@
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![LangGraph](https://img.shields.io/badge/LangGraph-12--Agent_Pipeline-FF6B6B?style=flat-square)](https://langchain-ai.github.io/langgraph)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-4285F4?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev)
+[![LiteLLM](https://img.shields.io/badge/LiteLLM-100+_Providers-orange?style=flat-square)](https://litellm.ai)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas_Vector_Search-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://mongodb.com)
 
 > **Enterprise KPIs Addressed:** Intent to Recommend · RevPAR · Digital Direct Share · Marriott Bonvoy Occupancy & Enrollments · EBITDA Growth
 
-*An enterprise-grade AI platform that dynamically categorizes Marriott hotel reviews into fine-grained topics, enables semantic search, surfaces popular mentions, detects emerging operational trends, and delivers actionable insights to property managers — powered by a **12-agent LangGraph pipeline** with Google Gemini and MongoDB Atlas Vector Search.*
+*An enterprise-grade AI platform that dynamically categorizes Marriott hotel reviews into fine-grained topics, enables semantic search, surfaces popular mentions, detects emerging operational trends, and delivers actionable insights to property managers — powered by a **12-agent LangGraph pipeline** with multi-provider LLM support (Gemini, Vertex AI, LiteLLM), Map-Reduce summarization, and in-memory vector search.*
 
 </div>
 
@@ -54,7 +55,7 @@ The result: a guest who wants to know *"Is the gym actually open at 5 AM?"* or *
 
 ## 2. Real-Time Scenario: How ReviewLens Helps Marriott
 
-### JW Marriott Seattle — Week of May 12, 2026
+### Courtyard New York Manhattan/Fifth Avenue — Week of May 19, 2026
 
 **Monday 9 AM** — 87 new reviews arrive from TripAdvisor and Marriott.com post-weekend.
 
@@ -62,23 +63,27 @@ The result: a guest who wants to know *"Is the gym actually open at 5 AM?"* or *
 
 ```
 Reviews In (87) → Preprocessing → Emoji Analysis → Bot Detection (3 removed)
-→ Sentiment Analysis → Trend Detection → Recommendations → Mentions → Embeddings → Export
+→ Sentiment Analysis → Trend Detection → Recommendations → Mentions → Embeddings
+→ Export → Summary Digest
 ```
 
-**What the Property GM Sees on Dashboard:**
+**What the Property GM Sees on Dashboard (`/dashboard/NYCES`):**
 
 | Signal | Finding | KPI Impact |
 |--------|---------|------------|
-| Trend Alert | "Housekeeping" complaints jumped from 12% → 38% in last 50 reviews | RevPAR at risk |
-| Popular Mention | "valet parking" appearing in 24 reviews (18 negative) | Intent to Recommend drops |
+| Trend Alert | "Bathroom maintenance" complaints jumped from 12% → 38% in last 50 reviews | RevPAR at risk |
+| Popular Mention | "shower pressure" appearing in 14 reviews (12 negative) | Intent to Recommend drops |
 | Sentiment Shift | "Dining" sentiment flipped negative after new menu launch | Bonvoy retention risk |
-| Recommendation | "Increase housekeeping staff on floors 4-8 during weekend peak" | +$12 RevPAR/night |
+| AI Summary | Natural editorial summary highlighting strengths & areas to improve | Digital Direct Share |
+| Executive Brief | C-suite ready brief with confidence score and priority actions | Leadership Index |
+| Recommendation | "Address bathroom caulk mold and tub stopper on floors 3–8" | +$12 RevPAR/night |
 
 **What the Guest Sees on Marriott.com:**
 
-- **Popular Mentions:** `rooftop bar` · `pike place market` · `corner suite` · `spa treatment` · `valet parking`
-- **Category Ratings:** Cleanliness 4.1 · Location 4.7 · Amenities 3.3 · Dining 2.7 · Service 4.0 · Value 3.6
-- **Semantic Search:** Guest types *"hotel with good gym near downtown"* → finds relevant reviews instantly
+- **Popular Mentions:** `friendly staff` · `shower pressure` · `fifth avenue location` · `room size` · `breakfast`
+- **Category Ratings:** Cleanliness 4.0 · Location 4.0 · Amenities 2.0 · Dining 2.0 · Service 5.0 · Value 3.0
+- **Semantic Search:** Guest types *"hotel with good staff near downtown"* → finds relevant reviews instantly
+- **AI Review Summary:** TripAdvisor-style narrative paragraph (no raw stats, natural editorial tone)
 
 ---
 
@@ -108,14 +113,15 @@ Reviews In (87) → Preprocessing → Emoji Analysis → Bot Detection (3 remove
 │  │  Popular Mentions       │    │  Trend Alerts & Anomaly Detection     │   │
 │  │  Semantic Search        │    │  Actionable Recommendations           │   │
 │  │  Category Ratings       │    │  Cross-Property Comparison            │   │
-│  │  Mention-Based Filter   │    │  Topic Heatmap                        │   │
+│  │  AI Review Summary      │    │  Executive Brief (LLM-powered)        │   │
+│  │  Mention-Based Filter   │    │  Property Selector Dropdown           │   │
 │  └────────────┬────────────┘    └────────────────┬──────────────────────┘   │
 │               │         REST + SSE Streaming      │                         │
 ├───────────────┼──────────────────────────────────┼─────────────────────────┤
 │               ▼                                   ▼                         │
-│   FastAPI Backend (Async, 26 endpoints)                                     │
+│   FastAPI Backend (Async, 30+ endpoints)                                    │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │             LangGraph 12-Agent Hotel Pipeline                       │   │
+│   │           LangGraph 12-Agent Hotel Pipeline                         │   │
 │   │                                                                     │   │
 │   │   [1] Preprocessing ──► [2] Emoji Analysis ──► [3] Orchestrator    │   │
 │   │           │                                          │              │   │
@@ -126,12 +132,16 @@ Reviews In (87) → Preprocessing → Emoji Analysis → Bot Detection (3 remove
 │   │   [7] Recommendations ──► [8] Cross-Compare ──► [9] Report        │   │
 │   │                                                      │              │   │
 │   │                         Hotel-Specific Stages:       ▼              │   │
-│   │              [10] Mentions Extraction (Gemini LLM)                  │   │
-│   │              [11] Embedding Generation (gemini-embedding-2)         │   │
-│   │              [12] MongoDB Export (Vector Search Ready)              │   │
+│   │              [10] Mentions Extraction (LLM)                         │   │
+│   │              [11] Embedding Generation (3072-dim)                   │   │
+│   │              [12] Export + Summary Digest                           │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                          │                                                  │
-│   Google Gemini 2.5 Flash  ·  MongoDB Atlas Vector Search                   │
+│   ┌─────── LLM Layer (Switchable) ──────┐                                  │
+│   │  Gemini API  │  Vertex AI (ADC)  │  LiteLLM (100+ providers)   │       │
+│   └──────────────────────────────────────┘                                  │
+│                          │                                                  │
+│   InMemoryVectorStore (LangChain) · MongoDB Atlas Vector Search (Planned)   │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -145,18 +155,59 @@ Reviews In (87) → Preprocessing → Emoji Analysis → Bot Detection (3 remove
 | 2 | **Emoji Analyst** | `emoji_agent.py` | Extracts emoji sentiment signals for confidence boosting | Intent to Recommend |
 | 3 | **Orchestrator** | `orchestrator_agent.py` | Dynamic routing, feedback loops, quality gates | EBITDA Growth |
 | 4 | **Deduplicator** | `deduplication_agent.py` | Bot detection, spam removal, duplicate clustering | Digital Direct Share |
-| 5 | **Sentiment AI** | `sentiment_agent.py` | Aspect-based sentiment across 6 hotel categories | RevPAR |
+| 5 | **Sentiment AI** | `sentiment_agent.py` | Aspect-based sentiment across 13 hotel categories | RevPAR |
 | 6 | **Trend Detector** | `trend_agent.py` | Sliding window anomaly detection, systemic vs isolated | RevPAR |
-| 7 | **Recommender** | `recommendations_agent.py` | LLM-powered prioritized action items for property GM | Leadership Index |
+| 7 | **Recommender** | `recommendations_agent.py` | LLM-powered SMART action items for property GM | Leadership Index |
 | 8 | **Cross-Compare** | `cross_comparison_agent.py` | Multi-property performance benchmarking | Net Rooms Growth |
 | 9 | **Report Synthesis** | `report_agent.py` | Aggregates all outputs into unified report | EBITDA Growth |
-| 10 | **Mentions Extractor** | `mentions_agent.py` | Gemini keyphrase extraction for Popular Mentions UI | Digital Direct Share |
-| 11 | **Embedding Generator** | `embedding_agent.py` | gemini-embedding-2 vectors for semantic search | Digital Direct Share |
-| 12 | **Hotel Exporter** | `export_agent.py` | MongoDB-ready document assembly with all enrichments | RevPAR |
+| 10 | **Mentions Extractor** | `mentions_agent.py` | Aspect-based keyphrase extraction for Popular Mentions UI | Digital Direct Share |
+| 11 | **Embedding Generator** | `embedding_agent.py` | 3072-dim vectors for semantic search (cosine similarity) | Digital Direct Share |
+| 12 | **Hotel Exporter** | `export_agent.py` | MongoDB-ready document assembly + summary digest trigger | RevPAR |
+
+### Summary Agent (Map-Reduce)
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| **Batch Digest (Map)** | `summary_agent.py` | Extracts compact statistics per ingestion batch without re-reading all reviews |
+| **Aggregate Summary (Reduce)** | `summary_agent.py` | LLM aggregates digests into TripAdvisor-style editorial narrative |
+| **Cache Layer** | `summary_cache.json` | Serves cached summaries; invalidated on new ingestion |
 
 ---
 
-## 6. Who Receives the Value?
+## 6. Key Features
+
+### Multi-Provider LLM Support
+
+ReviewLens supports switching between LLM providers via a single `.env` variable:
+
+| Provider | Config Value | Use Case |
+|----------|--------------|----------|
+| **Gemini API** | `LLM_PROVIDER=gemini` | Default — fast, cost-effective with API key auth |
+| **Vertex AI (ADC)** | `LLM_PROVIDER=googleADC` | Enterprise — uses Application Default Credentials |
+| **LiteLLM** | `LLM_PROVIDER=litellm` | Flexibility — route to OpenAI, Anthropic, Azure, or any of 100+ providers |
+
+### Semantic Search (In-Memory Vector Store)
+
+- Pre-computed 3072-dimensional embeddings loaded at startup (no re-embedding)
+- Cosine similarity search via LangChain `InMemoryVectorStore`
+- Metadata filtering by `hotel_id`, `sentiment`, and `tag`
+- Planned upgrade path to MongoDB Atlas Vector Search for production scale
+
+### Per-Property Analysis & Caching
+
+- Navigate to `/dashboard/{propertyCode}` to trigger analysis for a specific property
+- Results cached in `property_analysis_cache.json` — subsequent visits served instantly
+- Same pipeline powers both per-property and demo analysis
+
+### Executive Brief
+
+- LLM-generated C-suite summary with situation analysis, business impact, and priority actions
+- Downloadable as PDF
+- Confidence scoring (0–100)
+
+---
+
+## 7. Who Receives the Value?
 
 | Persona | Primary Use | Value Type |
 |---|---|---|
@@ -169,7 +220,7 @@ Reviews In (87) → Preprocessing → Emoji Analysis → Bot Detection (3 remove
 
 ---
 
-## 7. Project Structure
+## 8. Project Structure
 
 ```
 ReviewLens/
@@ -179,36 +230,65 @@ ReviewLens/
 │   │   ├── preprocessing_agent.py      # Text cleaning & sub-rating extraction
 │   │   ├── deduplication_agent.py      # Bot detection & duplicate removal
 │   │   ├── emoji_agent.py              # Emoji sentiment signal extraction
-│   │   ├── sentiment_agent.py          # Hotel aspect-based sentiment
+│   │   ├── sentiment_agent.py          # Hotel aspect-based sentiment (13 aspects)
 │   │   ├── trend_agent.py              # Trend & anomaly detection
 │   │   ├── cross_comparison_agent.py   # Multi-property comparison
-│   │   ├── recommendations_agent.py    # Actionable GM recommendations
+│   │   ├── recommendations_agent.py    # Actionable GM recommendations (SMART)
 │   │   ├── report_agent.py             # Report synthesis
-│   │   ├── mentions_agent.py           # Popular mentions extraction (Gemini)
-│   │   ├── embedding_agent.py          # Vector embedding generation
-│   │   └── export_agent.py             # MongoDB document export
+│   │   ├── mentions_agent.py           # Popular mentions extraction (LLM)
+│   │   ├── embedding_agent.py          # Vector embedding generation (3072-dim)
+│   │   ├── export_agent.py             # MongoDB document export
+│   │   └── summary_agent.py            # Map-Reduce narrative summary
 │   ├── core/
-│   │   ├── hotel_pipeline.py           # LangGraph pipeline orchestration
-│   │   ├── pipeline.py                 # Base pipeline definition
+│   │   ├── hotel_pipeline.py           # LangGraph hotel pipeline orchestration
+│   │   ├── pipeline.py                 # Generic analysis pipeline
+│   │   ├── llm_factory.py             # Multi-provider LLM factory (Gemini/ADC/LiteLLM)
 │   │   ├── config.py                   # Settings & environment
 │   │   └── models.py                   # Pydantic state models
 │   ├── data/
 │   │   ├── synthetic_generator.py      # 213 hotel review dataset generator
-│   │   └── hotel_reviews_processed.json # Processed output (MongoDB-ready)
-│   └── main.py                         # FastAPI application (26 endpoints)
+│   │   ├── hotel_reviews_processed.json # Processed output (MongoDB-ready)
+│   │   ├── batch_digests.json          # Map-phase summary digests
+│   │   ├── summary_cache.json          # Cached narrative summaries
+│   │   └── property_analysis_cache.json # Per-property analysis cache
+│   ├── scrapers/
+│   │   ├── amazon_scraper.py           # Amazon review scraper
+│   │   ├── flipkart_scraper.py         # Flipkart review scraper
+│   │   └── mock_data.py                # Mock data generator for scrapers
+│   └── main.py                         # FastAPI application (30+ endpoints)
 ├── frontend/
 │   └── src/
-│       ├── pages/                      # Dashboard · Hotel Reviews · Landing
-│       ├── components/                 # Charts, Mentions, Search, Pipeline
-│       └── store/                      # Zustand state management
-├── tripadvisor_hotel_reviews.csv       # 20,491 real hotel reviews (with sub-ratings)
+│       ├── pages/
+│       │   ├── DashboardPage.jsx       # Generic analysis dashboard (10 tabs)
+│       │   ├── PropertyDashboardPage.jsx # Per-property analysis view
+│       │   ├── HotelDashboardPage.jsx  # Hotel-specific analytics
+│       │   ├── ReviewPage.jsx          # Guest-facing review browser
+│       │   └── UploadPage.jsx          # CSV upload & ingestion
+│       ├── components/
+│       │   └── dashboard/
+│       │       ├── OverviewTab.jsx           # KPI summary cards
+│       │       ├── SentimentTab.jsx          # Aspect-based sentiment charts
+│       │       ├── TrendsTab.jsx             # Trend alerts & anomaly graphs
+│       │       ├── RecommendationsTab.jsx    # Priority action items
+│       │       ├── ExecutiveBriefTab.jsx     # AI-generated C-suite brief
+│       │       ├── ReviewsTab.jsx            # Paginated review explorer
+│       │       ├── CrossComparisonTab.jsx    # Multi-property benchmarks
+│       │       ├── EmojiAnalysisTab.jsx      # Emoji sentiment breakdown
+│       │       ├── AgentOrchestrationTab.jsx # Pipeline trace viewer
+│       │       └── LiveFeedTicker.jsx        # Real-time review feed
+│       └── store/
+│           ├── reviewStore.js          # Zustand store (analysis state)
+│           └── hotelStore.js           # Zustand store (hotel data)
+├── hotel_reviews.csv                   # Raw hotel reviews dataset
+├── tripadvisor_hotel_reviews.csv       # TripAdvisor reviews (with sub-ratings)
 ├── ReviewLens.md                       # Detailed hypothesis & solution doc
+├── QUICKSTART.md                       # Legacy quick start guide
 └── README.md
 ```
 
 ---
 
-## 8. Quick Start
+## 9. Quick Start
 
 ### Prerequisites
 
@@ -216,54 +296,109 @@ ReviewLens/
 |------|---------|---------|
 | Python | 3.11+ | Backend runtime |
 | Node.js | 18+ | Frontend build |
-| Google Gemini API Key | — | LLM & embeddings |
+| Google Gemini API Key | — | LLM & embeddings (default provider) |
 
 ### Backend
+
 ```bash
 cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-echo "GOOGLE_API_KEY=your_gemini_key_here" > .env
-echo "GEMINI_MODEL=gemini-2.5-flash-lite" >> .env
+# Minimal .env configuration
+cat > .env << 'EOF'
+GOOGLE_API_KEY=your_gemini_key_here
+GEMINI_MODEL=gemini-2.5-flash-lite
+LLM_PROVIDER=gemini
+EOF
 
 uvicorn main:app --reload --port 5000
 ```
 
 ### Frontend
+
 ```bash
 cd frontend
 pnpm install && pnpm run dev
 ```
 
-### Ingest Hotel Reviews
+### LLM Provider Configuration
+
 ```bash
-curl -X POST "http://localhost:5000/api/hotel-reviews/ingest" \
-  -F "file=@tripadvisor_hotel_reviews.csv" \
-  -F "hotel_id=jw_marriott_seattle" \
-  -F "max_rows=50"
+# Option 1: Gemini API (default)
+LLM_PROVIDER=gemini
+GOOGLE_API_KEY=your_key
+
+# Option 2: Google Vertex AI with ADC
+LLM_PROVIDER=googleADC
+GCP_PROJECT=your-project-id
+GCP_LOCATION=us-central1
+
+# Option 3: LiteLLM (OpenAI, Anthropic, Azure, etc.)
+LLM_PROVIDER=litellm
+LITELLM_MODEL=gpt-4o
+LITELLM_API_KEY=your_openai_key
+```
+
+### Ingest Hotel Reviews
+
+```bash
+# Ingest from CSV (batched at 100 reviews, rate-limit safe)
+curl -X POST "http://localhost:5000/api/hotel-reviews/ingest?hotel_id=NYCES&max_rows=50" \
+  -F "file=@hotel_reviews.csv"
 ```
 
 ### View Pipeline Graph
-Open **http://localhost:5000/api/hotel-reviews/graph** in your browser.
+
+Open **http://localhost:5000/api/hotel-reviews/graph** in your browser (renders Mermaid diagram client-side).
+
+### Access Property Dashboard
+
+Navigate to **http://localhost:5173/dashboard/NYCES** to view property-specific analysis.
 
 ---
 
-## 9. Key API Endpoints
+## 10. Key API Endpoints
 
 | Method | Endpoint | Description |
-|--------|----------|---------|
-| `POST` | `/api/hotel-reviews/ingest` | Ingest CSV through 12-agent pipeline |
+|--------|----------|-------------|
+| `POST` | `/api/hotel-reviews/ingest` | Ingest CSV through 12-agent pipeline (batched) |
 | `GET` | `/api/hotel-reviews/jobs/{id}` | Poll pipeline job status |
 | `GET` | `/api/hotel-reviews/mentions/popular` | Get ranked popular mentions |
 | `GET` | `/api/hotel-reviews/search` | Filter reviews by mention/sentiment/rating |
+| `GET` | `/api/hotel-reviews/semantic-search` | Cosine similarity search with metadata filters |
 | `GET` | `/api/hotel-reviews/stats` | Property statistics and sentiment breakdown |
+| `GET` | `/api/hotel-reviews/{hotel_id}/summary` | AI narrative summary (Map-Reduce) |
+| `GET` | `/api/hotel-reviews/data` | Paginated processed reviews (raw JSON) |
+| `GET` | `/api/hotel-reviews/properties` | List all available properties |
 | `GET` | `/api/hotel-reviews/graph` | Interactive pipeline visualization (Mermaid) |
-| `POST` | `/api/analyze/demo` | Run pipeline on synthetic hotel dataset |
+| `POST` | `/api/hotel-reviews/vector-store/reload` | Reload in-memory vector store |
+| `POST` | `/api/analyze/demo` | Run full pipeline on processed dataset |
+| `GET` | `/api/analyze/property/{code}` | Get cached property analysis |
+| `POST` | `/api/analyze/property/{code}` | Trigger property-specific analysis |
+| `POST` | `/api/brief` | Generate LLM executive brief |
+| `GET` | `/api/brief/download/pdf` | Download executive brief as PDF |
+| `POST` | `/chat` | AI Q&A chatbot over hotel reviews |
 
 ---
 
-## 10. Seeded Trends in Demo Data
+## 11. Frontend Dashboard Tabs
+
+| Tab | What It Shows |
+|-----|---------------|
+| **Overview** | KPI cards, rating distribution, sentiment pie chart, live feed |
+| **Sentiment** | Aspect-level sentiment heatmap across 13 hotel features |
+| **Trends** | Time-series anomaly graphs, systemic vs isolated alerts |
+| **Recommendations** | Prioritized SMART actions with estimated impact |
+| **Executive Brief** | AI-generated C-suite report with PDF export |
+| **Reviews** | Searchable, filterable review explorer with sentiment badges |
+| **Cross-Comparison** | Multi-property benchmarking charts |
+| **Emoji Analysis** | Emoji usage patterns and sentiment correlation |
+| **Agent Orchestration** | Pipeline execution trace and agent decisions |
+
+---
+
+## 12. Seeded Trends in Demo Data
 
 The synthetic dataset has **deliberately seeded complaint trends** that the Trend Agent catches:
 
@@ -276,23 +411,26 @@ The synthetic dataset has **deliberately seeded complaint trends** that the Tren
 
 ---
 
-## 11. Path to Production
+## 13. Path to Production
 
 | Phase | Timeline | Scope |
 |-------|----------|-------|
-| **Phase 1 — MVP** | Hackathon (48 hrs) | Synthetic data, 12-agent pipeline, React dashboard, local deployment |
-| **Phase 2 — Pilot** | < 4 weeks | 3 real properties, MongoDB Atlas, Gemini enterprise endpoint |
-| **Phase 3 — Production** | Q3–Q4 2026 | 9,000 properties, Kafka streaming, Aurora PostgreSQL, CDN |
+| **Phase 1 — MVP** | Hackathon (48 hrs) | Real hotel data, 12-agent pipeline, React dashboard, multi-LLM support, per-property analysis |
+| **Phase 2 — Pilot** | < 4 weeks | 3 real properties, MongoDB Atlas Vector Search, Gemini enterprise endpoint, Kafka ingestion |
+| **Phase 3 — Production** | Q3–Q4 2026 | 9,000 properties, Kafka streaming, Aurora PostgreSQL, CDN, real-time ingestion |
 
 **ROI:** $180K–$250K infrastructure cost vs. $30M+ direct booking conversion lift = **>100x ROI in Year 1**
 
 ---
 
-## 12. Tech Stack
+## 14. Tech Stack
 
-**Backend:** FastAPI · LangGraph · Google Gemini 2.5 Flash · gemini-embedding-2 · MongoDB Atlas Vector Search · RapidFuzz
-
-**Frontend:** React 18 · Vite · Tailwind CSS · shadcn/ui · Zustand · Mermaid.js
+| Layer | Technologies |
+|-------|-------------|
+| **Backend** | FastAPI · LangGraph · Google Gemini 2.5 Flash · LiteLLM · Vertex AI (ADC) · LangChain InMemoryVectorStore · RapidFuzz |
+| **Frontend** | React 18 · Vite · Tailwind CSS · Framer Motion · Zustand · Recharts · Mermaid.js |
+| **AI/ML** | gemini-embedding-2 (3072-dim) · Aspect-Based Sentiment · Map-Reduce Summarization · Cosine Similarity Search |
+| **Data** | MongoDB Atlas (planned) · JSON file store (current) · CSV ingestion · Batch processing |
 
 ---
 
@@ -301,9 +439,9 @@ The synthetic dataset has **deliberately seeded complaint trends** that the Tren
 | Criterion | Weight | ReviewLens Coverage |
 |---|---|---|
 | **Hypothesis** | 30% | Clear problem (static categories), measurable KPI impact (NPS +4–8pts, Direct Share +0.2%), 6 value types, 6 personas, revenue quantified ($30M+ opportunity) |
-| **Solution Framework** | 25% | Full architecture, 12-agent pipeline, MongoDB Vector Search, integration with UXL/mHelp/MPAD |
-| **Working POC** | 30% | 26 API endpoints, React dashboard, real TripAdvisor data (20,491 reviews), pipeline visualization, semantic search |
-| **Path to Production** | 15% | 3-phase rollout, TCO breakdown, governance/compliance, integration roadmap |
+| **Solution Framework** | 25% | Full architecture, 12-agent pipeline, multi-provider LLM, Map-Reduce summarization, per-property caching, executive brief generation |
+| **Working POC** | 30% | 30+ API endpoints, 10-tab React dashboard, real hotel data (568K+ lines processed), pipeline visualization, semantic search, property selector, PDF export |
+| **Path to Production** | 15% | 3-phase rollout, TCO breakdown, MongoDB Atlas upgrade path, multi-region LLM failover via LiteLLM |
 
 ---
 

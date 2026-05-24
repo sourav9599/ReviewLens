@@ -5,7 +5,7 @@ import { Loader2, RefreshCw } from "lucide-react";
 import { useReviewStore } from "../store/reviewStore";
 import DashboardPage from "./DashboardPage";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "/api";
 
 export default function PropertyDashboardPage() {
   const { propertyCode } = useParams();
@@ -22,7 +22,7 @@ export default function PropertyDashboardPage() {
 
     try {
       const { data } = await axios.post(
-        `${API_BASE}/analyze/property/${propertyCode}?force_refresh=${forceRefresh}`
+        `${API_BASE}/analyze/property/${propertyCode}?force_refresh=${forceRefresh}`,
       );
 
       if (data.from_cache && data.report) {
@@ -36,7 +36,9 @@ export default function PropertyDashboardPage() {
       }
     } catch (err) {
       if (err.response?.status === 404) {
-        setError(`No reviews found for property "${propertyCode}". Run ingestion first.`);
+        setError(
+          `No reviews found for property "${propertyCode}". Run ingestion first.`,
+        );
       } else {
         setError(err.message || "Failed to trigger analysis");
       }
@@ -82,7 +84,9 @@ export default function PropertyDashboardPage() {
             ? `Loading analysis for ${propertyCode}...`
             : `Running analysis pipeline for ${propertyCode}...`}
         </p>
-        <p className="text-xs text-gray-400">This may take a minute on first run (results are cached)</p>
+        <p className="text-xs text-gray-400">
+          This may take a minute on first run (results are cached)
+        </p>
       </div>
     );
   }
